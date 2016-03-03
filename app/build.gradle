@@ -17,6 +17,22 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+//    lintOptions {
+//        disable 'InvalidPackage'
+//    }
+//
+//    packagingOptions {
+//        exclude 'META-INFO/services/javax.annotation.Processing.Processor'
+//    }
 }
 
 dependencies {
@@ -24,4 +40,10 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.2.0'
     compile 'com.android.support:design:23.2.0'
+    compile 'com.android.support:recyclerview-v7:23.2.0'
+    compile 'com.android.support:support-v4:23.2.0'
+    compile 'io.reactivex:rxandroid:1.1.0'
+
+    compile 'javax.annotation:javax.annotation-api:1.2'
+    compile 'org.projectlombok:lombok:1.16.6'
 }
