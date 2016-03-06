@@ -3,8 +3,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.test.rxjava.MainActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_settings_sample1"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="@string/action_settings_sample1"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_settings_sample2"
+        android:orderInCategory="100"
+        android:title="@string/action_settings_sample2"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_settings_sample3"
+        android:orderInCategory="100"
+        android:title="@string/action_settings_sample3"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_settings_sample4"
+        android:orderInCategory="100"
+        android:title="@string/action_settings_sample4"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_settings_sample5"
+        android:orderInCategory="100"
+        android:title="@string/action_settings_sample5"
         app:showAsAction="never" />
 </menu>
