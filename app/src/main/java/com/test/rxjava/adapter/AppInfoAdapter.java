@@ -17,6 +17,10 @@ public class AppInfoAdapter extends RecyclerView.Adapter<AppInfoAdapter.ViewHold
     private LayoutInflater inflate;
     private List<AppInfo> appInfoList;
 
+    public void setAppInfoList(List<AppInfo> appInfoList) {
+        this.appInfoList = appInfoList;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (inflate == null)

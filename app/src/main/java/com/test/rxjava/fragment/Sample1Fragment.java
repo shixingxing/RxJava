@@ -37,4 +37,11 @@ public class Sample1Fragment extends Fragment {
 
         return binding.getRoot();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (viewModel != null)
+            viewModel.getAppInfo();
+    }
 }
