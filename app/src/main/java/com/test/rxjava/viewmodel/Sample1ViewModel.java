@@ -28,48 +28,47 @@ public class Sample1ViewModel extends MyObservable {
 
     public void getAppInfo() {
 
-        Observable<AppInfo> observable = Observable.create(new Observable.OnSubscribe<AppInfo>() {
-            @Override
-            public void call(Subscriber<? super AppInfo> subscriber) {
+        Observable<AppInfo> observable = Observable.create(subscriber -> {
+            List<AppInfo> appInfos = new ArrayList<AppInfo>();
+            final Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            List<ResolveInfo> resolveInfos = context.getPackageManager().queryIntentActivities(intent, 0);
 
-                List<AppInfo> appInfos = new ArrayList<AppInfo>();
-                final Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.addCategory(Intent.CATEGORY_LAUNCHER);
-                List<ResolveInfo> resolveInfos = context.getPackageManager().queryIntentActivities(intent, 0);
+            for (ResolveInfo resolveInfo : resolveInfos) {
+                appInfos.add(new AppInfo(0, resolveInfo.activityInfo.name, null));
 
-                for (ResolveInfo resolveInfo : resolveInfos) {
-                    appInfos.add(new AppInfo(0, resolveInfo.activityInfo.name, null));
-
-                    if (subscriber.isUnsubscribed()) {
-                        return;
-                    }
-                    subscriber.onNext(new AppInfo(0, resolveInfo.activityInfo.name, null));
+                if (subscriber.isUnsubscribed()) {
+                    return;
                 }
+                subscriber.onNext(new AppInfo(0, resolveInfo.activityInfo.name, null));
+            }
 
-                if (!subscriber.isUnsubscribed()) {
-                    subscriber.onCompleted();
-                }
-
+            if (!subscriber.isUnsubscribed()) {
+                subscriber.onCompleted();
             }
         });
 
-        observable.toSortedList().subscribe(new Observer<List<AppInfo>>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(List<AppInfo> appInfos) {
-
-                adapter.setAppInfoList(appInfos);
-                adapter.notifyDataSetChanged();
-            }
+        observable.toSortedList().subscribe(appInfos -> {
+            adapter.setAppInfoList(appInfos);
+            adapter.notifyDataSetChanged();
         });
+//        observable.toSortedList().subscribe(new Observer<List<AppInfo>>() {
+//            @Override
+//            public void onCompleted() {
+//
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//
+//            }
+//
+//            @Override
+//            public void onNext(List<AppInfo> appInfos) {
+//
+//                adapter.setAppInfoList(appInfos);
+//                adapter.notifyDataSetChanged();
+//            }
+//        });
     }
 }
