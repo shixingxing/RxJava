@@ -37,7 +37,6 @@ public class Sample2ViewModel extends MyObservable {
             appInfos.add(new AppInfo(0, resolveInfo.activityInfo.name, null));
         }
 
-
         Observable.from(appInfos).subscribe(appInfo -> {
             Log.i(getClass().getName(), "onNext");
             adapter.addAppInfo(appInfo);

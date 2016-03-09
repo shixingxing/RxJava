@@ -31,7 +31,7 @@ public class Sample1ViewModel extends MyObservable {
     public void getAppInfo() {
 
         Observable<AppInfo> observable = Observable.create(subscriber -> {
-            List<AppInfo> appInfos = new ArrayList<AppInfo>();
+            List<AppInfo> appInfos = new ArrayList<>();
             final Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_LAUNCHER);
             PackageManager packageManager = context.getPackageManager();
