@@ -10,6 +10,7 @@ import com.test.rxjava.databinding.LayoutAppinfoItemBinding;
 import com.test.rxjava.model.AppInfo;
 import com.test.rxjava.viewmodel.ItemAppInfoViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AppInfoAdapter extends RecyclerView.Adapter<AppInfoAdapter.ViewHolder> {
@@ -19,6 +20,17 @@ public class AppInfoAdapter extends RecyclerView.Adapter<AppInfoAdapter.ViewHold
 
     public void setAppInfoList(List<AppInfo> appInfoList) {
         this.appInfoList = appInfoList;
+    }
+
+    public void addAppInfo(AppInfo appInfo) {
+        if (appInfo == null) {
+            return;
+        }
+        if (appInfoList == null) {
+            appInfoList = new ArrayList<>();
+        }
+
+        appInfoList.add(appInfo);
     }
 
     @Override

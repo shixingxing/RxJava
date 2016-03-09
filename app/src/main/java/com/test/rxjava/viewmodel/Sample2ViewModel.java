@@ -1,0 +1,50 @@
+package com.test.rxjava.viewmodel;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.util.Log;
+
+import com.test.rxjava.adapter.AppInfoAdapter;
+import com.test.rxjava.model.AppInfo;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import rx.Observable;
+
+public class Sample2ViewModel extends MyObservable {
+    private AppInfoAdapter adapter;
+
+    public Sample2ViewModel(Context context) {
+        super(context);
+    }
+
+    public void setAdapter(AppInfoAdapter adapter) {
+        this.adapter = adapter;
+    }
+
+    public void getAppInfo() {
+
+        List<AppInfo> appInfos = new ArrayList<>();
+        final Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        PackageManager packageManager = context.getPackageManager();
+        List<ResolveInfo> resolveInfos = packageManager.queryIntentActivities(intent, 0);
+
+        for (ResolveInfo resolveInfo : resolveInfos) {
+            appInfos.add(new AppInfo(0, resolveInfo.activityInfo.name, null));
+        }
+
+
+        Observable.from(appInfos).subscribe(appInfo -> {
+            Log.i(getClass().getName(), "onNext");
+            adapter.addAppInfo(appInfo);
+        }, throwable -> {
+        }, () -> {
+            Log.i(getClass().getName(), "onCompleted");
+            adapter.notifyDataSetChanged();
+        });
+    }
+}

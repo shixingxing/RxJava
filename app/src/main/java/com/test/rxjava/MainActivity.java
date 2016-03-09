@@ -9,6 +9,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.test.rxjava.fragment.Sample1Fragment;
+import com.test.rxjava.fragment.Sample2Fragment;
+import com.test.rxjava.fragment.Sample3Fragment;
+import com.test.rxjava.fragment.Sample4Fragment;
+import com.test.rxjava.fragment.Sample5Fragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,15 +45,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (id == R.id.action_settings_sample2) {
+            jump(new Sample2Fragment());
             return true;
         }
         if (id == R.id.action_settings_sample3) {
+            jump(new Sample3Fragment());
             return true;
         }
         if (id == R.id.action_settings_sample4) {
+            jump(new Sample4Fragment());
             return true;
         }
         if (id == R.id.action_settings_sample5) {
+            jump(new Sample5Fragment());
             return true;
         }
 

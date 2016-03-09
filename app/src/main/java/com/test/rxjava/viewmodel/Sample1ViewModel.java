@@ -2,6 +2,7 @@ package com.test.rxjava.viewmodel;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 
 import com.test.rxjava.adapter.AppInfoAdapter;
@@ -32,10 +33,11 @@ public class Sample1ViewModel extends MyObservable {
             List<AppInfo> appInfos = new ArrayList<AppInfo>();
             final Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_LAUNCHER);
-            List<ResolveInfo> resolveInfos = context.getPackageManager().queryIntentActivities(intent, 0);
+            PackageManager packageManager = context.getPackageManager();
+            List<ResolveInfo> resolveInfos = packageManager.queryIntentActivities(intent, 0);
 
             for (ResolveInfo resolveInfo : resolveInfos) {
-                appInfos.add(new AppInfo(0, resolveInfo.activityInfo.name, null));
+                appInfos.add(new AppInfo(0, resolveInfo.activityInfo.loadLabel(packageManager).toString(), null));
 
                 if (subscriber.isUnsubscribed()) {
                     return;
