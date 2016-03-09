@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.util.Log;
 
 import com.test.rxjava.adapter.AppInfoAdapter;
 import com.test.rxjava.model.AppInfo;
@@ -51,26 +52,12 @@ public class Sample1ViewModel extends MyObservable {
         });
 
         observable.toSortedList().subscribe(appInfos -> {
+            Log.i(getClass().getName(), "onNext");
             adapter.setAppInfoList(appInfos);
             adapter.notifyDataSetChanged();
+        }, throwable -> {
+        }, () -> {
+            Log.i(getClass().getName(), "onCompleted");
         });
-//        observable.toSortedList().subscribe(new Observer<List<AppInfo>>() {
-//            @Override
-//            public void onCompleted() {
-//
-//            }
-//
-//            @Override
-//            public void onError(Throwable e) {
-//
-//            }
-//
-//            @Override
-//            public void onNext(List<AppInfo> appInfos) {
-//
-//                adapter.setAppInfoList(appInfos);
-//                adapter.notifyDataSetChanged();
-//            }
-//        });
     }
 }
