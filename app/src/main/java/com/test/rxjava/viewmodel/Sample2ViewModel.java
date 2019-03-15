@@ -12,7 +12,11 @@ import com.test.rxjava.model.AppInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+
 
 public class Sample2ViewModel extends MyObservable {
     private AppInfoAdapter adapter;
@@ -37,13 +41,15 @@ public class Sample2ViewModel extends MyObservable {
             appInfos.add(new AppInfo(0, resolveInfo.activityInfo.name, null));
         }
 
-        Observable.from(appInfos).subscribe(appInfo -> {
-            Log.i(getClass().getName(), "onNext");
-            adapter.addAppInfo(appInfo);
-        }, throwable -> {
-        }, () -> {
-            Log.i(getClass().getName(), "onCompleted");
-            adapter.notifyDataSetChanged();
+        AppInfo[] infos = new AppInfo[appInfos.size()];
+        appInfos.toArray(infos);
+        Observable.fromArray(infos).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<AppInfo>() {
+            @Override
+            public void accept(AppInfo o) throws Exception {
+                Log.i(getClass().getName(), "onNext");
+                adapter.addAppInfo(o);
+                adapter.notifyDataSetChanged();
+            }
         });
     }
 }

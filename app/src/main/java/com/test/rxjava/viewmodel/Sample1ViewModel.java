@@ -12,9 +12,11 @@ import com.test.rxjava.model.AppInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
-import rx.Observer;
-import rx.Subscriber;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+
 
 public class Sample1ViewModel extends MyObservable {
 
@@ -40,24 +42,27 @@ public class Sample1ViewModel extends MyObservable {
             for (ResolveInfo resolveInfo : resolveInfos) {
                 appInfos.add(new AppInfo(0, resolveInfo.activityInfo.loadLabel(packageManager).toString(), null));
 
-                if (subscriber.isUnsubscribed()) {
+                if (subscriber.isDisposed()) {
                     return;
                 }
                 subscriber.onNext(new AppInfo(0, resolveInfo.activityInfo.name, null));
             }
 
-            if (!subscriber.isUnsubscribed()) {
-                subscriber.onCompleted();
+            if (!subscriber.isDisposed()) {
+                subscriber.onComplete();
             }
         });
 
-        observable.toSortedList().subscribe(appInfos -> {
-            Log.i(getClass().getName(), "onNext");
-            adapter.setAppInfoList(appInfos);
-            adapter.notifyDataSetChanged();
-        }, throwable -> {
-        }, () -> {
-            Log.i(getClass().getName(), "onCompleted");
+        observable.observeOn(Schedulers.io());
+        observable.subscribeOn(AndroidSchedulers.mainThread());
+        observable.toSortedList().subscribe(new Consumer<List<AppInfo>>() {
+            @Override
+            public void accept(List<AppInfo> appInfos) throws Exception {
+                Log.i(getClass().getName(), "onNext");
+                adapter.setAppInfoList(appInfos);
+                adapter.notifyDataSetChanged();
+            }
         });
+
     }
 }
