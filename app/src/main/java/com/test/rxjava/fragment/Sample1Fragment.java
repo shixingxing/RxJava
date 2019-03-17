@@ -41,7 +41,8 @@ public class Sample1Fragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (viewModel != null)
+        if (viewModel != null) {
             viewModel.getAppInfo();
+        }
     }
 }

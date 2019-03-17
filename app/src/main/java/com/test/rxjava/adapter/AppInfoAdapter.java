@@ -35,8 +35,9 @@ public class AppInfoAdapter extends RecyclerView.Adapter<AppInfoAdapter.ViewHold
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (inflate == null)
+        if (inflate == null) {
             inflate = LayoutInflater.from(parent.getContext());
+        }
         LayoutAppinfoItemBinding binding = DataBindingUtil.inflate(inflate, R.layout.layout_appinfo_item, parent, false);
         return new ViewHolder(binding);
     }
