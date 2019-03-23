@@ -1,6 +1,6 @@
 package com.test.rxjava.utils;
 
-import com.test.rxjava.interfaces.IRxJavaContext;
+import com.test.rxjava.interfaces.IRxJavaLifeCycle;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -10,9 +10,10 @@ import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class RxUtil {
+
     private static final String TAG = RxUtil.class.getSimpleName();
 
-    public static void io(IRxJavaContext context, RxTask task) {
+    public static void io(IRxJavaLifeCycle context, RxTask task, Object... objects) {
 
 
         Observable observable = Observable.create(new ObservableOnSubscribe<Object>() {
@@ -23,7 +24,7 @@ public class RxUtil {
                 }
 
                 if (task != null) {
-                    Object value = task.doSth();
+                    Object value = task.doSth(observableEmitter, objects);
                     if (!observableEmitter.isDisposed()) {
                         observableEmitter.onNext(value);
                     }
@@ -60,8 +61,8 @@ public class RxUtil {
 
         observable.subscribe(disposable);
 
-        if (context.getRxContext() != null) {
-            context.getRxContext().add(disposable);
+        if (context.getRxLifeCycle() != null) {
+            context.getRxLifeCycle().add(disposable);
         }
     }
 
@@ -69,10 +70,11 @@ public class RxUtil {
         /**
          * 异步线程调用
          *
+         * @param emitter 发送器，由于长时间线程中判断订阅关系是否已经切断
          * @param object
          * @return
          */
-        T doSth(Object... object);
+        T doSth(ObservableEmitter emitter, Object... object);
 
         /**
          * 结果

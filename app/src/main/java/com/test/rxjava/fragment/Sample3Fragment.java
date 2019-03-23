@@ -15,6 +15,7 @@ import com.test.rxjava.viewmodel.Sample3ViewModel;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import io.reactivex.ObservableEmitter;
 
 /**
  * 生命周期与线程控制
@@ -35,25 +36,28 @@ public class Sample3Fragment extends BaseFragment {
 
         RxUtil.io(this, new RxUtil.RxTask() {
             @Override
-            public Object doSth(Object... object) {
+            public Object doSth(ObservableEmitter emitter, Object... object) {
                 for (int i = 1000; i < 2000; i++) {
 
-                    Log.e("doSth", String.valueOf(i));
+                    if (emitter.isDisposed()) {
+                        break;
+                    }
+                    Log.e("doSth", Thread.currentThread().getName() + ":--" + String.valueOf(i));
 
                     try {
-                        Thread.sleep(20);
+                        Thread.sleep(50);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
-                return "11111";
+                return null;
             }
 
             @Override
             public void onNext(Object value) {
                 Log.e("onNext", String.valueOf(value));
             }
-        });
+        }, null);
     }
 
     @Nullable

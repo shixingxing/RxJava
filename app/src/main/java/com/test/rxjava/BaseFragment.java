@@ -2,7 +2,7 @@ package com.test.rxjava;
 
 import android.os.Bundle;
 
-import com.test.rxjava.interfaces.IRxJavaContext;
+import com.test.rxjava.interfaces.IRxJavaLifeCycle;
 import com.test.rxjava.interfaces.LifeCycleObserver;
 
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import io.reactivex.disposables.Disposable;
 
-public class BaseFragment extends Fragment implements IRxJavaContext {
+public class BaseFragment extends Fragment implements IRxJavaLifeCycle {
 
     protected List<Disposable> disposables;
 
@@ -42,7 +42,7 @@ public class BaseFragment extends Fragment implements IRxJavaContext {
     }
 
     @Override
-    public List<Disposable> getRxContext() {
+    public List<Disposable> getRxLifeCycle() {
         return disposables;
     }
 }
