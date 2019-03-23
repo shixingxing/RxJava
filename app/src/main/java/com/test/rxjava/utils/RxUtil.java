@@ -31,13 +31,10 @@ public class RxUtil {
                 } else {
                     observableEmitter.onNext(null);
                 }
-
             }
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-
-
         DisposableObserver disposable = new DisposableObserver<Object>() {
             @Override
             public void onNext(Object o) {
