@@ -1,10 +1,6 @@
 package com.test.rxjava.fragment;
 
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +9,12 @@ import com.test.rxjava.R;
 import com.test.rxjava.adapter.AppInfoAdapter;
 import com.test.rxjava.databinding.FragmentSample2Binding;
 import com.test.rxjava.viewmodel.Sample2ViewModel;
+
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class Sample2Fragment extends Fragment {
     private FragmentSample2Binding binding;
@@ -27,7 +29,7 @@ public class Sample2Fragment extends Fragment {
         viewModel = new Sample2ViewModel(getActivity());
         binding.setViewModel(viewModel);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         binding.recycler.setLayoutManager(layoutManager);
 
         adapter = new AppInfoAdapter();
