@@ -1,10 +1,6 @@
 package com.test.rxjava;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -14,7 +10,11 @@ import com.test.rxjava.fragment.Sample3Fragment;
 import com.test.rxjava.fragment.Sample4Fragment;
 import com.test.rxjava.fragment.Sample5Fragment;
 
-public class MainActivity extends AppCompatActivity {
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
