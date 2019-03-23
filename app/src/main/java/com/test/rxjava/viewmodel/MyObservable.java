@@ -1,7 +1,7 @@
 package com.test.rxjava.viewmodel;
 
 import android.content.Context;
-import android.databinding.BaseObservable;
+import androidx.databinding.BaseObservable;
 
 public class MyObservable extends BaseObservable implements ViewModel {
 
