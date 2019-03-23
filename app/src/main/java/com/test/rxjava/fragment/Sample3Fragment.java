@@ -6,28 +6,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.test.rxjava.BaseFragment;
 import com.test.rxjava.R;
 import com.test.rxjava.databinding.FragmentSample3Binding;
-import com.test.rxjava.interfaces.LifeCycleObserver;
+import com.test.rxjava.utils.RxUtil;
 import com.test.rxjava.viewmodel.Sample3ViewModel;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LifecycleOwner;
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * 生命周期与线程控制
+ *
+ * @author shixingxing
  */
-public class Sample3Fragment extends Fragment {
+public class Sample3Fragment extends BaseFragment {
 
     private static final String TAG = Sample3Fragment.class.getSimpleName();
 
@@ -35,50 +29,31 @@ public class Sample3Fragment extends Fragment {
     private Sample3ViewModel model;
 
 
-    Disposable disposable;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getLifecycle().addObserver(new LifeCycleObserver() {
-            @Override
-            public void onCreate(@NonNull LifecycleOwner owner) {
-                super.onCreate(owner);
-            }
 
+        RxUtil.io(this, new RxUtil.RxTask() {
             @Override
-            public void onDestroy(@NonNull LifecycleOwner owner) {
-                super.onDestroy(owner);
-                disposable.dispose();
-            }
-        });
+            public Object doSth(Object... object) {
+                for (int i = 1000; i < 2000; i++) {
 
-        disposable = Observable.create(new ObservableOnSubscribe<Integer>() {
-            @Override
-            public void subscribe(ObservableEmitter<Integer> observableEmitter) throws Exception {
-
-                for (int i = 0; i < 1000; i++) {
-                    if (observableEmitter.isDisposed()) {
-                        break;
-                    }
-                    observableEmitter.onNext(i);
+                    Log.e("doSth", String.valueOf(i));
 
                     try {
-                        Thread.sleep(200);
+                        Thread.sleep(20);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
+                return "11111";
             }
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Integer>() {
-                    @Override
-                    public void accept(Integer integer) throws Exception {
-                        Log.i(TAG, String.valueOf(integer));
-                    }
-                });
+
+            @Override
+            public void onNext(Object value) {
+                Log.e("onNext", String.valueOf(value));
+            }
+        });
     }
 
     @Nullable
