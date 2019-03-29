@@ -3,9 +3,10 @@ package com.test.rxjava.viewmodel;
 import android.content.Context;
 
 
-public class Sample3ViewModel extends MyObservable {
+public class Sample4ViewModel extends MyObservable {
 
-    public Sample3ViewModel(Context context) {
+    public Sample4ViewModel(Context context) {
         super(context);
     }
+
 }

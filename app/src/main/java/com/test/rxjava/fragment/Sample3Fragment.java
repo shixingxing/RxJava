@@ -57,7 +57,7 @@ public class Sample3Fragment extends BaseFragment {
             public void onNext(Object value) {
                 Log.e("onNext", String.valueOf(value));
             }
-        }, null);
+        });
     }
 
     @Nullable
