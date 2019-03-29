@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">RxJava</string>
-    <string name="action_settings_sample1">sample1</string>
-    <string name="action_settings_sample2">sample2</string>
-    <string name="action_settings_sample3">sample3</string>
-    <string name="action_settings_sample4">sample4</string>
+    <string name="action_settings_sample1">Rxjava1</string>
+    <string name="action_settings_sample2">Rxjava2</string>
+    <string name="action_settings_sample3">lifecycle+rxjava</string>
+    <string name="action_settings_sample4">aidl</string>
     <string name="action_settings_sample5">sample5</string>
 </resources>
