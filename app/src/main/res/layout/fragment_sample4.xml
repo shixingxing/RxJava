@@ -18,6 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp"
+            android:textColor="@android:color/black"
+            android:text="@{viewModel.getStatusText}"
             android:textSize="20sp" />
 
         <LinearLayout
@@ -29,12 +31,14 @@
                 android:id="@+id/bind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="@{viewModel.onClickBind}"
                 android:text="绑定" />
 
             <Button
                 android:id="@+id/unbind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="@{viewModel.onClickUnBind}"
                 android:text="解绑" />
         </LinearLayout>
     </LinearLayout>

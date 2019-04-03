@@ -19,7 +19,9 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".service.CMDService" />
+        <service
+            android:name=".service.CMDService"
+            android:process=":service" />
     </application>
 
 </manifest>
