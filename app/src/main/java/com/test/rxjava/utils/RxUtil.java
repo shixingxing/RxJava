@@ -13,7 +13,7 @@ public class RxUtil {
 
     private static final String TAG = RxUtil.class.getSimpleName();
 
-    public static void io(IRxJavaLifeCycle context, RxTask task, Object... objects) {
+    public static DisposableObserver io(IRxJavaLifeCycle context, RxTask task, Object... objects) {
 
 
         Observable observable = Observable.create(new ObservableOnSubscribe<Object>() {
@@ -58,9 +58,11 @@ public class RxUtil {
 
         observable.subscribe(disposable);
 
-        if (context.getRxLifeCycle() != null) {
+        if (context != null && context.getRxLifeCycle() != null) {
             context.getRxLifeCycle().add(disposable);
         }
+
+        return disposable;
     }
 
     public interface RxTask<T> {

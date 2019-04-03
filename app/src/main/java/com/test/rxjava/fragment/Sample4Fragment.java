@@ -29,4 +29,12 @@ public class Sample4Fragment extends Fragment {
 
         return binding.getRoot();
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (model != null) {
+            model.destroy();
+        }
+    }
 }
