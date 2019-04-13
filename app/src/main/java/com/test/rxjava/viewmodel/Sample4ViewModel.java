@@ -6,20 +6,17 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.MemoryFile;
-import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
 
 import com.test.rxjava.service.CMDService;
+import com.test.rxjava.utils.NIOClient;
 import com.test.rxjava.utils.RxUtil;
 import com.text.rxjava.ICMDCallBack;
 import com.text.rxjava.ICMDInterface;
 
-import java.io.FileDescriptor;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import io.reactivex.ObservableEmitter;
 import io.reactivex.observers.DisposableObserver;
@@ -48,11 +45,25 @@ public class Sample4ViewModel extends MyObservable {
     public void onClickBind(View view) {
         bindService(context, serviceConnection);
 //        startCmd();
+
+        RxUtil.io(null, new RxUtil.RxTask() {
+            @Override
+            public Object doSth(ObservableEmitter emitter, Object... object) {
+                startSocket();
+                return null;
+            }
+
+            @Override
+            public void onNext(Object value) {
+
+            }
+        });
     }
 
     public void onClickUnBind(View view) {
         unBindService(context, serviceConnection);
 //        stopCmd();
+        stopSocket();
     }
 
     private void startCmd() {
@@ -151,23 +162,23 @@ public class Sample4ViewModel extends MyObservable {
                 e.printStackTrace();
             }
 
-            try {
-                memoryFile = new MemoryFile("test_memory", MEMORY_FILE_SIZE);
-                Method method = MemoryFile.class.getDeclaredMethod("getFileDescriptor");
-                FileDescriptor des = (FileDescriptor) method.invoke(memoryFile);
-                ParcelFileDescriptor parcelFileDescriptor = ParcelFileDescriptor.dup(des);
-                cmdInterface.initParcelFileDescriptor(parcelFileDescriptor);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                memoryFile = new MemoryFile("test_memory", MEMORY_FILE_SIZE);
+//                Method method = MemoryFile.class.getDeclaredMethod("getFileDescriptor");
+//                FileDescriptor des = (FileDescriptor) method.invoke(memoryFile);
+//                ParcelFileDescriptor parcelFileDescriptor = ParcelFileDescriptor.dup(des);
+//                cmdInterface.initParcelFileDescriptor(parcelFileDescriptor);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            } catch (NoSuchMethodException e) {
+//                e.printStackTrace();
+//            } catch (IllegalAccessException e) {
+//                e.printStackTrace();
+//            } catch (InvocationTargetException e) {
+//                e.printStackTrace();
+//            } catch (RemoteException e) {
+//                e.printStackTrace();
+//            }
         }
 
         @Override
@@ -199,4 +210,27 @@ public class Sample4ViewModel extends MyObservable {
             observer.dispose();
         }
     }
+
+    NIOClient client;
+
+    private void startSocket() {
+
+        client = new NIOClient();
+        try {
+            client.initClient(2333);
+            client.listen();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void stopSocket() {
+
+        if (client != null) {
+            client.close();
+        }
+    }
+
+
 }
