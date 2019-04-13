@@ -4,16 +4,28 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.test.rxjava.utils.RxUtil;
 import com.text.rxjava.ICMDCallBack;
 
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.nio.channels.SelectableChannel;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
+import java.util.Iterator;
 
 import androidx.annotation.Nullable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.observers.DisposableObserver;
 
 public class CMDService extends Service {
 
@@ -28,6 +40,11 @@ public class CMDService extends Service {
     private ICMDCallBack callBack;
 
     ParcelFileDescriptor pd;
+
+
+    Selector selector;
+    ServerSocketChannel socketChannel;
+    DisposableObserver disposableObserver;
 
     /**
      * Return the communication channel to the service.  May return null if
@@ -63,6 +80,31 @@ public class CMDService extends Service {
     public void onCreate() {
         super.onCreate();
         mServiceState = SERVICE_DEFAULT;
+
+        try {
+            selector = Selector.open();
+
+            socketChannel = ServerSocketChannel.open();
+            socketChannel.configureBlocking(false);
+            socketChannel.socket().bind(new InetSocketAddress(2333));
+            socketChannel.register(selector, SelectionKey.OP_ACCEPT);
+
+            disposableObserver = RxUtil.io(null, new RxUtil.RxTask() {
+                @Override
+                public Object doSth(ObservableEmitter emitter, Object... object) {
+                    startSelector(selector);
+                    return null;
+                }
+
+                @Override
+                public void onNext(Object value) {
+
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -76,6 +118,82 @@ public class CMDService extends Service {
         super.onDestroy();
         mServiceState = SERVICE_DESTROY;
         callBack = null;
+
+        try {
+            if (socketChannel != null) {
+                socketChannel.close();
+            }
+            if (selector != null) {
+                selector.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void startSelector(Selector selector) {
+        int loopCount = 0;
+        while (true) {
+            // Selector轮询注册来的Channel, 阻塞到至少有一个通道在你注册的事件上就绪了。
+            int n = 0;
+            try {
+                n = selector.select();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (n == 0) {
+                continue;
+            }
+            System.out.println("loopCount:" + loopCount);
+            Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
+            while (iterator.hasNext()) {
+                // 获取SelectionKey
+
+                SelectionKey selectionKey = iterator.next();
+                SocketChannel socketChannel = null;
+                SelectableChannel selectableChannel = selectionKey.channel();
+
+                // 每一步都要判断selectionKey.isValid()，避免断开连接产生的java.nio.channels.CancelledKeyException
+                if (selectionKey.isValid() && selectionKey.isAcceptable()) {
+                    Log.i("TTTT", "selectionKey isAcceptable");
+                    acceptClient(selectionKey, (ServerSocketChannel) selectableChannel);
+                }
+                if (selectionKey.isValid() && selectionKey.isReadable()) {
+                    // a channel is ready for reading
+                    Log.i("TTTT", "selectionKey isReadable");
+                    socketChannel = (SocketChannel) selectableChannel;// 返回为之创建此键的通道。
+//                    readMsg(selectionKey, socketChannel);
+                }
+                if (selectionKey.isValid() && selectionKey.isWritable()) {
+                    // a channel is ready for writing
+                    Log.i("TTTT", "selectionKey isWritable");
+                    socketChannel = (SocketChannel) selectableChannel;
+//                    writeMsg(selectionKey, socketChannel);
+                }
+                iterator.remove();
+            }
+            loopCount++;
+        }
+    }
+
+
+    private void acceptClient(SelectionKey selectionKey, ServerSocketChannel serverChannel) {
+        // 此方法返回的套接字通道（如果有）将处于阻塞模式。
+        try {
+            SocketChannel socketChannel = serverChannel.accept();
+            socketChannel.configureBlocking(false);
+
+            // 向Selector注册Channel，设置读取为感兴趣操作，此类操作将会在下一次选择器select操作时被交付。同时附加byteBuffer对象作为数据传递的容器
+            socketChannel.register(selectionKey.selector(), SelectionKey.OP_READ);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                System.out.println("connected from:" + socketChannel.getLocalAddress());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            selectionKey.cancel();
+        }
     }
 
     /**

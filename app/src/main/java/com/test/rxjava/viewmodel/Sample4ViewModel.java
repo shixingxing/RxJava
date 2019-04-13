@@ -47,12 +47,12 @@ public class Sample4ViewModel extends MyObservable {
 
     public void onClickBind(View view) {
         bindService(context, serviceConnection);
-        startCmd();
+//        startCmd();
     }
 
     public void onClickUnBind(View view) {
         unBindService(context, serviceConnection);
-        stopCmd();
+//        stopCmd();
     }
 
     private void startCmd() {
