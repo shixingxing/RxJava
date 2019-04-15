@@ -74,6 +74,7 @@ dependencies {
     // For integration with Fresco
     implementation 'com.facebook.litho:litho-fresco:0.25.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'org.apache.mina:mina-core:2.1.0'
 }
 repositories {
     mavenCentral()

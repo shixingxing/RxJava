@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.MemoryFile;
 import android.os.RemoteException;
@@ -46,18 +47,24 @@ public class Sample4ViewModel extends MyObservable {
         bindService(context, serviceConnection);
 //        startCmd();
 
-        RxUtil.io(null, new RxUtil.RxTask() {
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public Object doSth(ObservableEmitter emitter, Object... object) {
-                startSocket();
-                return null;
-            }
+            public void run() {
+                RxUtil.io(null, new RxUtil.RxTask() {
+                    @Override
+                    public Object doSth(ObservableEmitter emitter, Object object) {
+                        startSocket();
+                        return null;
+                    }
 
-            @Override
-            public void onNext(Object value) {
+                    @Override
+                    public void onNext(Object value) {
 
+                    }
+                });
             }
-        });
+        }, 10000);
+
     }
 
     public void onClickUnBind(View view) {
@@ -69,7 +76,7 @@ public class Sample4ViewModel extends MyObservable {
     private void startCmd() {
         observer = RxUtil.io(null, new RxUtil.RxTask() {
             @Override
-            public Object doSth(ObservableEmitter emitter, Object... object) {
+            public Object doSth(ObservableEmitter emitter, Object object) {
 
                 while (true) {
                     if (emitter.isDisposed()) {

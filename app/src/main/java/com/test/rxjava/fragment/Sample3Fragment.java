@@ -36,7 +36,7 @@ public class Sample3Fragment extends BaseFragment {
 
         RxUtil.io(this, new RxUtil.RxTask() {
             @Override
-            public Object doSth(ObservableEmitter emitter, Object... object) {
+            public Object doSth(ObservableEmitter emitter, Object object) {
                 for (int i = 1000; i < 2000; i++) {
 
                     if (emitter.isDisposed()) {

@@ -75,7 +75,7 @@ public class CMDService extends Service {
 
         disposableObserver = RxUtil.io(null, new RxUtil.RxTask() {
             @Override
-            public Object doSth(ObservableEmitter emitter, Object... object) {
+            public Object doSth(ObservableEmitter emitter, Object object) {
                 server = new NIOServer();
                 try {
                     server.initServer(2333);
