@@ -5,8 +5,8 @@ buildscript {
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 28
@@ -15,7 +15,7 @@ android {
     defaultConfig {
         applicationId "com.test.rxjava"
         minSdkVersion 16
-        targetSdkVersion 26
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
 
@@ -54,7 +54,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
@@ -63,18 +63,18 @@ dependencies {
     implementation "android.arch.lifecycle:common-java8:1.1.1"
 
     // Litho
-    implementation 'com.facebook.litho:litho-core:0.25.0'
-    implementation 'com.facebook.litho:litho-widget:0.25.0'
-
-    annotationProcessor 'com.facebook.litho:litho-processor:0.25.0'
+//    implementation 'com.facebook.litho:litho-core:0.25.0'
+//    implementation 'com.facebook.litho:litho-widget:0.25.0'
+//
+//    annotationProcessor 'com.facebook.litho:litho-processor:0.25.0'
 
     // SoLoader
-    implementation 'com.facebook.soloader:soloader:0.6.0'
+//    implementation 'com.facebook.soloader:soloader:0.6.0'
 
     // For integration with Fresco
-    implementation 'com.facebook.litho:litho-fresco:0.25.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'org.apache.mina:mina-core:2.1.0'
+//    implementation 'com.facebook.litho:litho-fresco:0.25.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+//    implementation 'org.apache.mina:mina-core:2.1.0'
 }
 repositories {
     mavenCentral()
