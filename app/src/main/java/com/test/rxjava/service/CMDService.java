@@ -9,13 +9,14 @@ import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
 import com.test.rxjava.utils.NIOServer;
 import com.test.rxjava.utils.RxUtil;
 import com.text.rxjava.ICMDCallBack;
 
 import java.io.FileInputStream;
 
-import androidx.annotation.Nullable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.observers.DisposableObserver;
 
@@ -73,7 +74,7 @@ public class CMDService extends Service {
         mServiceState = SERVICE_DEFAULT;
 
 
-        disposableObserver = RxUtil.io(null, new RxUtil.RxTask() {
+        disposableObserver = RxUtil.io(new RxUtil.RxTask() {
             @Override
             public Object doSth(ObservableEmitter emitter, Object object) {
                 server = new NIOServer();

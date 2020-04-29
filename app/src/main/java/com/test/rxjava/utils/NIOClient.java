@@ -1,7 +1,10 @@
 package com.test.rxjava.utils;
 
+import android.os.Build;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -23,6 +26,9 @@ public class NIOClient {
     public void initClient(int port) throws IOException {
         // 获得一个Socket通道
         channel = SocketChannel.open();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            channel.setOption(StandardSocketOptions.SO_KEEPALIVE,true).setOption(StandardSocketOptions.TCP_NODELAY,true);
+        }
         // 设置通道为非阻塞
         channel.configureBlocking(false);
         // 获得一个通道管理器
@@ -31,7 +37,7 @@ public class NIOClient {
         // 客户端连接服务器,其实方法执行并没有实现连接，需要在listen()方法中调
         channel.connect(new InetSocketAddress(port));
         // 将通道管理器和该通道绑定，并为该通道注册SelectionKey.OP_CONNECT事件
-        channel.register(selector, SelectionKey.OP_CONNECT);
+        channel.register(selector, SelectionKey.OP_ACCEPT);
     }
 
     /**
@@ -67,7 +73,7 @@ public class NIOClient {
                     // 在这里可以给服务端发送信息哦
                     channel.write(ByteBuffer.wrap(new String("hello server!").getBytes()));
                     // 在和服务端连接成功之后，为了可以接收到服务端的信息，需要给通道设置读的权限。
-                    channel.register(this.selector, SelectionKey.OP_CONNECT); // 获得了可读的事件
+                    channel.register(this.selector, SelectionKey.OP_WRITE); // 获得了可读的事件
                 } else if (key.isReadable()) {
                     read(key);
                 }

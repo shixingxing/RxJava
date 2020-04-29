@@ -54,7 +54,7 @@ public class Sample4ViewModel extends AndroidViewModel {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                RxUtil.io(null, new RxUtil.RxTask() {
+                RxUtil.io(new RxUtil.RxTask() {
                     @Override
                     public Object doSth(ObservableEmitter emitter, Object object) {
                         startSocket();
@@ -67,7 +67,7 @@ public class Sample4ViewModel extends AndroidViewModel {
                     }
                 });
             }
-        }, 10000);
+        }, 5000);
 
     }
 
@@ -78,7 +78,7 @@ public class Sample4ViewModel extends AndroidViewModel {
     }
 
     private void startCmd() {
-        observer = RxUtil.io(null, new RxUtil.RxTask() {
+        observer = RxUtil.io(new RxUtil.RxTask() {
             @Override
             public Object doSth(ObservableEmitter emitter, Object object) {
 

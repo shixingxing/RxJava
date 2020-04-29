@@ -62,10 +62,11 @@ public class NIOServer {
                     SocketChannel channel = server.accept();
                     // 设置成非阻塞
                     channel.configureBlocking(false);
+                    System.out.println("hello client");
                     // 在这里可以发送消息给客户端
                     channel.write(ByteBuffer.wrap(new String("hello client").getBytes()));
                     // 在客户端连接成功之后，为了可以接收到客户端的信息，需要给通道设置读的权限
-                    channel.register(this.selector, SelectionKey.OP_READ);
+                    channel.register(this.selector, SelectionKey.OP_CONNECT);
                     // 获得了可读的事件
                 } else if (key.isReadable()) {
                     read(key);
