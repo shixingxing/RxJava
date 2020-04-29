@@ -1,5 +1,6 @@
 package com.test.rxjava.viewmodel;
 
+import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,9 @@ import android.os.MemoryFile;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 
 import com.test.rxjava.service.CMDService;
 import com.test.rxjava.utils.NIOClient;
@@ -23,7 +27,11 @@ import io.reactivex.ObservableEmitter;
 import io.reactivex.observers.DisposableObserver;
 
 
-public class Sample4ViewModel extends MyObservable {
+public class Sample4ViewModel extends AndroidViewModel {
+
+    public Sample4ViewModel(@NonNull Application application) {
+        super(application);
+    }
 
     private ICMDInterface cmdInterface;
 
@@ -34,17 +42,13 @@ public class Sample4ViewModel extends MyObservable {
     private MemoryFile memoryFile;
     private int offSet = 0;
 
-    public Sample4ViewModel(Context context) {
-        super(context);
-    }
-
 
     public String getStatusText() {
         return "";
     }
 
     public void onClickBind(View view) {
-        bindService(context, serviceConnection);
+        bindService(getApplication(), serviceConnection);
 //        startCmd();
 
         new Handler().postDelayed(new Runnable() {
@@ -68,7 +72,7 @@ public class Sample4ViewModel extends MyObservable {
     }
 
     public void onClickUnBind(View view) {
-        unBindService(context, serviceConnection);
+        unBindService(getApplication(), serviceConnection);
 //        stopCmd();
         stopSocket();
     }
@@ -211,8 +215,8 @@ public class Sample4ViewModel extends MyObservable {
     }
 
     @Override
-    public void destroy() {
-        super.destroy();
+    protected void onCleared() {
+        super.onCleared();
         if (observer != null) {
             observer.dispose();
         }

@@ -6,13 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.test.rxjava.utils.LiveDataBus;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+
+import com.test.rxjava.utils.LiveDataBus;
 
 public class Sample5Fragment extends Fragment {
 
@@ -34,7 +33,7 @@ public class Sample5Fragment extends Fragment {
 
         LiveDataBus.get()
                 .with("key_test", String.class)
-                .observe(this, new Observer<String>() {
+                .observe(getViewLifecycleOwner(), new Observer<String>() {
                     @Override
                     public void onChanged(@Nullable String s) {
                         Log.i("key_test:onChanged", s);

@@ -1,68 +1,15 @@
 package com.test.rxjava.viewmodel;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.util.Log;
+import android.app.Application;
 
-import com.test.rxjava.adapter.AppInfoAdapter;
-import com.test.rxjava.model.AppInfo;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 
 
-public class Sample1ViewModel extends MyObservable {
+public class Sample1ViewModel extends AndroidViewModel {
 
-    private AppInfoAdapter adapter;
-
-    public Sample1ViewModel(Context context) {
-        super(context);
+    public Sample1ViewModel(@NonNull Application application) {
+        super(application);
     }
 
-    public void setAdapter(AppInfoAdapter adapter) {
-        this.adapter = adapter;
-    }
-
-    public void getAppInfo() {
-
-        Observable<AppInfo> observable = Observable.create(subscriber -> {
-            List<AppInfo> appInfos = new ArrayList<>();
-            final Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_LAUNCHER);
-            PackageManager packageManager = context.getPackageManager();
-            List<ResolveInfo> resolveInfos = packageManager.queryIntentActivities(intent, 0);
-
-            for (ResolveInfo resolveInfo : resolveInfos) {
-                appInfos.add(new AppInfo(0, resolveInfo.activityInfo.loadLabel(packageManager).toString(), null));
-
-                if (subscriber.isDisposed()) {
-                    return;
-                }
-                subscriber.onNext(new AppInfo(0, resolveInfo.activityInfo.name, null));
-            }
-
-            if (!subscriber.isDisposed()) {
-                subscriber.onComplete();
-            }
-        });
-
-        observable.observeOn(Schedulers.io());
-        observable.subscribeOn(AndroidSchedulers.mainThread());
-        observable.toSortedList().subscribe(new Consumer<List<AppInfo>>() {
-            @Override
-            public void accept(List<AppInfo> appInfos) throws Exception {
-                Log.i(getClass().getName(), "onNext");
-                adapter.setAppInfoList(appInfos);
-                adapter.notifyDataSetChanged();
-            }
-        });
-
-    }
 }

@@ -5,14 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.test.rxjava.R;
-import com.test.rxjava.databinding.FragmentSample4Binding;
-import com.test.rxjava.viewmodel.Sample4ViewModel;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.test.rxjava.R;
+import com.test.rxjava.databinding.FragmentSample4Binding;
+import com.test.rxjava.viewmodel.Sample4ViewModel;
 
 public class Sample4Fragment extends Fragment {
 
@@ -24,8 +25,6 @@ public class Sample4Fragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_sample4, container, false);
 
-        model = new Sample4ViewModel(getContext());
-        binding.setViewModel(model);
 
         return binding.getRoot();
     }
@@ -33,8 +32,14 @@ public class Sample4Fragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (model != null) {
-            model.destroy();
-        }
+
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        model = new ViewModelProvider(this).get(Sample4ViewModel.class);
+        binding.setViewModel(model);
+
     }
 }

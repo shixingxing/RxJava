@@ -1,11 +1,14 @@
 package com.test.rxjava.viewmodel;
 
-import android.content.Context;
+import android.app.Application;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 
 
-public class Sample3ViewModel extends MyObservable {
+public class Sample3ViewModel extends AndroidViewModel {
 
-    public Sample3ViewModel(Context context) {
-        super(context);
+    public Sample3ViewModel(@NonNull Application application) {
+        super(application);
     }
 }

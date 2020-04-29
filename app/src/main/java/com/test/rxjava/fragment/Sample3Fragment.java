@@ -6,15 +6,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.test.rxjava.BaseFragment;
 import com.test.rxjava.R;
 import com.test.rxjava.databinding.FragmentSample3Binding;
 import com.test.rxjava.utils.RxUtil;
 import com.test.rxjava.viewmodel.Sample3ViewModel;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
 import io.reactivex.ObservableEmitter;
 
 /**
@@ -65,9 +67,13 @@ public class Sample3Fragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_sample3, container, false);
 
-        model = new Sample3ViewModel(getActivity());
-        binding.setViewModel(model);
-
         return binding.getRoot();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        model = new ViewModelProvider(this).get(Sample3ViewModel.class);
+        binding.setViewModel(model);
     }
 }

@@ -1,39 +1,39 @@
-package com.test.rxjava.viewmodel;
-
-import android.content.Context;
-
-import com.test.rxjava.model.AppInfo;
-
-public class ItemAppInfoViewModel extends MyObservable {
-
-    private AppInfo appInfo;
-
-    public ItemAppInfoViewModel(Context context, AppInfo appInfo) {
-        super(context);
-        this.appInfo = appInfo;
-    }
-
-    public void setAppInfo(AppInfo appInfo) {
-        this.appInfo = appInfo;
-        notifyChange();
-    }
-
-    public String getName() {
-        return appInfo.getName();
-    }
-
-    public String getIconPath() {
-        return appInfo.getIcon();
-    }
-
-//    @BindingAdapter("bind:imagePath")
-//    public static void setImage(ImageView image, String path) {
+//package com.test.rxjava.viewmodel;
 //
-//        if (path == null || path.isEmpty()) {
-//            return;
-//        }
+//import android.content.Context;
 //
-//        Bitmap bitmap = BitmapFactory.decodeFile(path);
-//        image.setImageBitmap(bitmap);
+//import com.test.rxjava.model.AppInfo;
+//
+//public class ItemAppInfoViewModel extends MyObservable {
+//
+//    private AppInfo appInfo;
+//
+//    public ItemAppInfoViewModel(Context context, AppInfo appInfo) {
+//        super(context);
+//        this.appInfo = appInfo;
 //    }
-}
+//
+//    public void setAppInfo(AppInfo appInfo) {
+//        this.appInfo = appInfo;
+//        notifyChange();
+//    }
+//
+//    public String getName() {
+//        return appInfo.getName();
+//    }
+//
+//    public String getIconPath() {
+//        return appInfo.getIcon();
+//    }
+//
+////    @BindingAdapter("bind:imagePath")
+////    public static void setImage(ImageView image, String path) {
+////
+////        if (path == null || path.isEmpty()) {
+////            return;
+////        }
+////
+////        Bitmap bitmap = BitmapFactory.decodeFile(path);
+////        image.setImageBitmap(bitmap);
+////    }
+//}

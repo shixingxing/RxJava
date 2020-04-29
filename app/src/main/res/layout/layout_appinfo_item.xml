@@ -2,14 +2,6 @@
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="com.test.rxjava.viewmodel.ItemAppInfoViewModel" />
-    </data>
-
-
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,7 +21,6 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{viewModel.name}"
                 android:textSize="@dimen/text_size" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
