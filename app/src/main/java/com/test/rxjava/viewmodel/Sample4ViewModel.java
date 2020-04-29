@@ -5,143 +5,68 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.MemoryFile;
-import android.os.RemoteException;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
-import com.test.rxjava.service.CMDService;
-import com.test.rxjava.utils.NIOClient;
-import com.test.rxjava.utils.RxUtil;
-import com.text.rxjava.ICMDCallBack;
-import com.text.rxjava.ICMDInterface;
-
-import java.io.IOException;
-
-import io.reactivex.ObservableEmitter;
-import io.reactivex.observers.DisposableObserver;
+import com.test.rxjava.service.MinaClientService;
+import com.test.rxjava.service.MinaServerService;
 
 
 public class Sample4ViewModel extends AndroidViewModel {
 
+    MinaServerService.ServerBinder serverBinder;
+    MinaClientService.ClientBinder clientBinder;
+
     public Sample4ViewModel(@NonNull Application application) {
         super(application);
+        bindServerService(getApplication(), serverConnection);
+        bindClientService(getApplication(), clientConnection);
     }
 
-    private ICMDInterface cmdInterface;
+    @Override
+    protected void onCleared() {
+        super.onCleared();
 
-    private DisposableObserver observer;
-
-
-    private static final int MEMORY_FILE_SIZE = 10 * 1024 * 1024;
-    private MemoryFile memoryFile;
-    private int offSet = 0;
-
-
-    public String getStatusText() {
-        return "";
+        unBindServerService(getApplication(), serverConnection);
+        unBindClientService(getApplication(), clientConnection);
     }
 
-    public void onClickBind(View view) {
-        bindService(getApplication(), serviceConnection);
-//        startCmd();
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                RxUtil.io(new RxUtil.RxTask() {
-                    @Override
-                    public Object doSth(ObservableEmitter emitter, Object object) {
-                        startSocket();
-                        return null;
-                    }
-
-                    @Override
-                    public void onNext(Object value) {
-
-                    }
-                });
-            }
-        }, 5000);
-
+    public void onClickServerStart(View view) {
+        if (serverBinder != null) {
+            serverBinder.start();
+        }
     }
 
-    public void onClickUnBind(View view) {
-        unBindService(getApplication(), serviceConnection);
-//        stopCmd();
-        stopSocket();
+    public void onClickServerStop(View view) {
+        if (serverBinder != null) {
+            serverBinder.stop();
+        }
     }
 
-    private void startCmd() {
-        observer = RxUtil.io(new RxUtil.RxTask() {
-            @Override
-            public Object doSth(ObservableEmitter emitter, Object object) {
-
-                while (true) {
-                    if (emitter.isDisposed()) {
-                        return null;
-                    }
-
-                    if (cmdInterface != null) {
-                        byte[] bytes = new byte[2 * 1024 * 1024];
-
-                        bytes[0] = 50;
-                        try {
-                            memoryFile.writeBytes(bytes, 0, offSet, bytes.length);
-                            cmdInterface.push(offSet, bytes.length);
-
-                            Log.i("TTT", "write:" + bytes.length + "offset:" + offSet);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                        }
-
-                        offSet = offSet + bytes.length;
-                        if (MEMORY_FILE_SIZE - offSet < bytes.length) {
-                            offSet = 0;
-                        }
-
-                    }
-
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                        break;
-                    }
-                }
-
-                return null;
-            }
-
-            @Override
-            public void onNext(Object value) {
-                Log.i("TTT", "onComplete");
-            }
-        });
+    public void onClickClientStart(View view) {
+        if (clientBinder != null) {
+            clientBinder.start();
+        }
     }
 
-    private void stopCmd() {
-        if (observer != null) {
-            observer.dispose();
+    public void onClickClientStop(View view) {
+        if (clientBinder != null) {
+            clientBinder.stop();
         }
     }
 
     /**
-     * 绑定服务
+     * 服务端服务
      */
-    private void bindService(Context context, ServiceConnection serviceConnection) {
+    private void bindServerService(Context context, ServiceConnection serviceConnection) {
         if (context == null || null == serviceConnection) {
             return;
         }
         Intent intent = new Intent();
-        intent.setClass(context, CMDService.class);
+        intent.setClass(context, MinaServerService.class);
         context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
@@ -150,7 +75,7 @@ public class Sample4ViewModel extends AndroidViewModel {
      *
      * @param context
      */
-    private void unBindService(Context context, ServiceConnection serviceConnection) {
+    private void unBindServerService(Context context, ServiceConnection serviceConnection) {
         if (context == null || null == serviceConnection) {
             return;
         }
@@ -163,85 +88,59 @@ public class Sample4ViewModel extends AndroidViewModel {
     }
 
 
-    ServiceConnection serviceConnection = new ServiceConnection() {
+    ServiceConnection serverConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            cmdInterface = ICMDInterface.Stub.asInterface(service);
-            try {
-                cmdInterface.registerCallback(new CMDCallBack());
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-
-//            try {
-//                memoryFile = new MemoryFile("test_memory", MEMORY_FILE_SIZE);
-//                Method method = MemoryFile.class.getDeclaredMethod("getFileDescriptor");
-//                FileDescriptor des = (FileDescriptor) method.invoke(memoryFile);
-//                ParcelFileDescriptor parcelFileDescriptor = ParcelFileDescriptor.dup(des);
-//                cmdInterface.initParcelFileDescriptor(parcelFileDescriptor);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            } catch (NoSuchMethodException e) {
-//                e.printStackTrace();
-//            } catch (IllegalAccessException e) {
-//                e.printStackTrace();
-//            } catch (InvocationTargetException e) {
-//                e.printStackTrace();
-//            } catch (RemoteException e) {
-//                e.printStackTrace();
-//            }
+            serverBinder = (MinaServerService.ServerBinder) service;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            try {
-                if (null != cmdInterface) {
-                    cmdInterface.unRegisterCallback();
-                }
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-            cmdInterface = null;
+            serverBinder = null;
         }
     };
 
 
-    class CMDCallBack extends ICMDCallBack.Stub {
-
-        @Override
-        public void callback(int value) throws RemoteException {
-
+    /**
+     * 客户端服务
+     */
+    private void bindClientService(Context context, ServiceConnection serviceConnection) {
+        if (context == null || null == serviceConnection) {
+            return;
         }
+        Intent intent = new Intent();
+        intent.setClass(context, MinaClientService.class);
+        context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        if (observer != null) {
-            observer.dispose();
+    /**
+     * 解绑服务
+     *
+     * @param context
+     */
+    private void unBindClientService(Context context, ServiceConnection serviceConnection) {
+        if (context == null || null == serviceConnection) {
+            return;
         }
-    }
-
-    NIOClient client;
-
-    private void startSocket() {
-
-        client = new NIOClient();
         try {
-            client.initClient(2333);
-            client.listen();
+            // 当需要多次调用doSomething()方法的时候，如果直接bindService是会报错的
+            context.unbindService(serviceConnection);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
-    private void stopSocket() {
 
-        if (client != null) {
-            client.close();
+    ServiceConnection clientConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            clientBinder = (MinaClientService.ClientBinder) service;
         }
-    }
 
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            clientBinder = null;
+        }
+    };
 
 }
