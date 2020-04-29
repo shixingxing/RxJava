@@ -18,10 +18,17 @@ class MainFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        sample1.setOnClickListener { v->
-            run {
-                Navigation.findNavController(v).navigate(MainFragmentDirections.sample1Action())
-            }
+        sample1.setOnClickListener { v ->
+            Navigation.findNavController(v).navigate(MainFragmentDirections.sample1Action())
+        }
+        sample2.setOnClickListener { v ->
+            Navigation.findNavController(v).navigate(MainFragmentDirections.sample2Action())
+        }
+        sample3.setOnClickListener { v ->
+            Navigation.findNavController(v).navigate(MainFragmentDirections.sample3Action())
+        }
+        sample4.setOnClickListener { v ->
+            Navigation.findNavController(v).navigate(MainFragmentDirections.sample4Action())
         }
     }
 }
