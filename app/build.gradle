@@ -66,6 +66,8 @@ dependencies {
 
     // multidex
     implementation "androidx.multidex:multidex:2.0.1"
+
+    implementation "com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.3"
 //    // Litho
 //    implementation 'com.facebook.litho:litho-core:0.25.0'
 //    implementation 'com.facebook.litho:litho-widget:0.25.0'
