@@ -18,6 +18,7 @@ import com.test.rxjava.utils.RxUtil;
 import com.test.rxjava.viewmodel.Sample3ViewModel;
 
 import io.reactivex.ObservableEmitter;
+import io.reactivex.observers.DisposableObserver;
 
 /**
  * 生命周期与线程控制
@@ -36,10 +37,10 @@ public class Sample3Fragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        RxUtil.io(this, new RxUtil.RxTask() {
+        DisposableObserver observer = RxUtil.io(new RxUtil.RxTask() {
             @Override
             public Object doSth(ObservableEmitter emitter, Object object) {
-                for (int i = 1000; i < 2000; i++) {
+                for (int i = 1000; i < Integer.MAX_VALUE; i++) {
 
                     if (emitter.isDisposed()) {
                         break;
@@ -60,6 +61,7 @@ public class Sample3Fragment extends BaseFragment {
                 Log.e("onNext", String.valueOf(value));
             }
         });
+        disposables.add(observer);
     }
 
     @Nullable

@@ -1,6 +1,5 @@
 package com.test.rxjava.utils;
 
-import com.test.rxjava.interfaces.IRxJavaLifeCycle;
 
 import java.util.concurrent.TimeUnit;
 
@@ -15,7 +14,7 @@ public class RxUtil {
 
     private static final String TAG = RxUtil.class.getSimpleName();
 
-    public static DisposableObserver io(IRxJavaLifeCycle context, RxTask task, long delay, Object object) {
+    public static DisposableObserver io(RxTask task, long delay, Object object) {
 
 
         Observable observable = Observable.create(new ObservableOnSubscribe<Object>() {
@@ -61,19 +60,15 @@ public class RxUtil {
 
         observable.subscribe(disposable);
 
-        if (context != null && context.getRxLifeCycle() != null) {
-            context.getRxLifeCycle().add(disposable);
-        }
-
         return disposable;
     }
 
-    public static DisposableObserver io(IRxJavaLifeCycle context, RxTask task, Object value) {
-        return io(context, task, 0, value);
+    public static DisposableObserver io(RxTask task, Object value) {
+        return io(task, 0, value);
     }
 
-    public static DisposableObserver io(IRxJavaLifeCycle context, RxTask task) {
-        return io(context, task, 0, null);
+    public static DisposableObserver io(RxTask task) {
+        return io(task, 0, null);
     }
 
     public interface RxTask<T> {
