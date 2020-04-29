@@ -1,10 +1,5 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-}
-
 apply plugin: 'com.android.application'
+apply plugin: 'androidx.navigation.safeargs'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
@@ -68,6 +63,10 @@ dependencies {
     implementation "androidx.multidex:multidex:2.0.1"
 
     implementation "com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.3"
+
+    // navigation
+    implementation "androidx.navigation:navigation-fragment:2.2.2"
+    implementation "androidx.navigation:navigation-ui:2.2.2"
 //    // Litho
 //    implementation 'com.facebook.litho:litho-core:0.25.0'
 //    implementation 'com.facebook.litho:litho-widget:0.25.0'
