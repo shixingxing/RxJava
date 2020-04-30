@@ -59,7 +59,7 @@ public class MinaClientService extends Service {
         public void stop() {
             Log.i(TAG, "stop");
             if (softReference != null && softReference.get() != null) {
-                softReference.get().client.start();
+                softReference.get().client.stop();
             }
         }
 
