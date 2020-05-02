@@ -28,14 +28,14 @@
                 android:id="@+id/onClickServerStart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{viewModel.onClickServerStart}"
+                android:onClick="@{viewModel::onClickServerStart}"
                 android:text="开始" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/onClickServerStop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{viewModel.onClickServerStop}"
+                android:onClick="@{viewModel::onClickServerStop}"
                 android:text="停止" />
         </LinearLayout>
 
@@ -55,14 +55,14 @@
                 android:id="@+id/onClickClientStart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{viewModel.onClickClientStart}"
+                android:onClick="@{viewModel::onClickClientStart}"
                 android:text="开始" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/onClickClientStop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{viewModel.onClickClientStop}"
+                android:onClick="@{viewModel::onClickClientStop}"
                 android:text="停止" />
         </LinearLayout>
     </LinearLayout>
