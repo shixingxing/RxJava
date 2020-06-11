@@ -49,4 +49,15 @@
         android:text="sample4 socket"
         android:textColor="#000000"
         android:textSize="16sp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/sample5"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="15dp"
+        android:background="@drawable/white_button"
+        android:gravity="center"
+        android:text="sample5 work"
+        android:textColor="#000000"
+        android:textSize="16sp" />
 </LinearLayout>

@@ -30,5 +30,8 @@ class MainFragment : BaseFragment() {
         sample4.setOnClickListener { v ->
             Navigation.findNavController(v).navigate(MainFragmentDirections.sample4Action())
         }
+        sample5.setOnClickListener { v ->
+            Navigation.findNavController(v).navigate(MainFragmentDirections.sample5Action())
+        }
     }
 }
