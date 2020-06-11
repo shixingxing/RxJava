@@ -5,7 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequest
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
 import com.test.rxjava.R
+import com.test.rxjava.service.SampleWork
+import java.util.concurrent.TimeUnit
 
 /**
  * work
@@ -21,5 +27,10 @@ class Sample5Fragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val data = Data.Builder().putString("key","token").build()
+
+        val workManager = context?.let { WorkManager.getInstance(it) }
+        workManager?.enqueue(OneTimeWorkRequest.Builder(SampleWork::class.java).setInputData(data).build())
+//        workManager?.enqueue(PeriodicWorkRequest.Builder(SampleWork::class.java, 20, TimeUnit.MINUTES).build())
     }
 }
