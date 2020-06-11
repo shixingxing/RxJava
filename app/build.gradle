@@ -34,8 +34,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding = true
+        // for view binding :
+        // viewBinding = true
     }
 
 //    lintOptions {
@@ -55,6 +57,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
     implementation 'androidx.cardview:cardview:1.0.0'
     //rxjava
     implementation "io.reactivex.rxjava2:rxjava:2.2.10"
@@ -65,7 +68,7 @@ dependencies {
     // multidex
     implementation "androidx.multidex:multidex:2.0.1"
 
-    implementation "com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.3"
+    implementation "com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4"
 
     // navigation
     implementation "androidx.navigation:navigation-fragment:2.2.2"
