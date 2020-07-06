@@ -39,7 +39,7 @@ class Sample6Fragment : BaseFragment() {
             }
         }
 
-        scan.setOnClickListener { bluetoothAdapter.isEnabled.apply { scanDevice() } }
+        scan.setOnClickListener { scanDevice() }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
