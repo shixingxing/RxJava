@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.AppCompatToggleButton
+        android:id="@+id/blue_tooth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textOff="@string/blue_tooth_off"
+        android:textOn="@string/blue_tooth_on" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/scan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="scan" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

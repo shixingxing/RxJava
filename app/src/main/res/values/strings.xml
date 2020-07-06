@@ -5,4 +5,7 @@
     <string name="action_settings_sample3">lifecycle+rxjava</string>
     <string name="action_settings_sample4">aidl</string>
     <string name="action_settings_sample5">sample5</string>
+
+    <string name="blue_tooth_on">BlueTooth On</string>
+    <string name="blue_tooth_off">BlueTooth Off</string>
 </resources>
