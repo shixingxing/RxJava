@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -23,8 +22,7 @@ public class Sample4Fragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_sample4, container, false);
-
+        binding = FragmentSample4Binding.inflate(inflater);
 
         return binding.getRoot();
     }
@@ -39,7 +37,11 @@ public class Sample4Fragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         model = new ViewModelProvider(this).get(Sample4ViewModel.class);
-        binding.setViewModel(model);
 
+        binding.onClickServerStart.setOnClickListener(v -> model.onClickServerStart(v));
+        binding.onClickServerStop.setOnClickListener(v -> model.onClickServerStop(v));
+
+        binding.onClickClientStart.setOnClickListener(v -> model.onClickClientStart(v));
+        binding.onClickClientStop.setOnClickListener(v -> model.onClickClientStop(v));
     }
 }
