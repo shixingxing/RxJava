@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import androidx.core.content.PermissionChecker
 import com.byox.drawview.enums.DrawingCapture
 import com.test.rxjava.BaseFragment
 import com.test.rxjava.R
@@ -53,8 +53,8 @@ public class Sample8Fragment : BaseFragment() {
         if (activity == null) {
             return
         }
-        if (ContextCompat.checkSelfPermission(requireActivity(),
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE) !== PackageManager.PERMISSION_GRANTED) {
+        if (PermissionChecker.checkSelfPermission(requireActivity(),
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE) !== PermissionChecker.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(requireActivity(), arrayOf(
                     Manifest.permission.WRITE_EXTERNAL_STORAGE),
                     STORAGE_PERMISSIONS)
