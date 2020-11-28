@@ -15,6 +15,19 @@
     <!--启用应用启动设备发现或者操作蓝牙设备的超级管理员-->
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.flash"
+        android:required="false" />
+
     <application
         android:name=".MainApplication"
         android:allowBackup="true"
@@ -36,6 +49,8 @@
             </intent-filter>
 
         </activity>
+
+        <activity android:name=".CaptureActivity" />
 
         <service
             android:name=".service.CMDService"

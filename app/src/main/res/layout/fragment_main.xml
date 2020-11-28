@@ -15,7 +15,7 @@
             android:layout_margin="15dp"
             android:background="@drawable/white_button"
             android:gravity="center"
-            android:text="sample1"
+            android:text="qrcode"
             android:textColor="#000000"
             android:textSize="16sp" />
 

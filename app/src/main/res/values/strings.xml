@@ -8,4 +8,8 @@
 
     <string name="blue_tooth_on">BlueTooth On</string>
     <string name="blue_tooth_off">BlueTooth Off</string>
+
+    <!--    qr code-->
+    <string name="base_ok">确定</string>
+    <string name="error_dialog_msg_camera_error">相机错误</string>
 </resources>
