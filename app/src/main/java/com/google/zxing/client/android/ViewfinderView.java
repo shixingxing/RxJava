@@ -34,9 +34,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This view is overlaid on top of the camera preview. It adds the viewfinder
- * rectangle and partial transparency outside it, as well as the laser scanner
- * animation and result points.
+ * This view is overlaid on top of the camera preview. It adds the viewfinder rectangle and partial
+ * transparency outside it, as well as the laser scanner animation and result points.
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
@@ -44,20 +43,16 @@ public final class ViewfinderView extends View {
 
     private static final int[] SCANNER_ALPHA = {0, 64, 128, 192, 255, 192, 128, 64};
     private static final long ANIMATION_DELAY = 80L;
-    // private static final int ANIMATION_RANGE = 150;
     private static final int CURRENT_POINT_OPACITY = 0xA0;
     private static final int MAX_RESULT_POINTS = 20;
     private static final int POINT_SIZE = 6;
-    private static final int PADDING = 8;
 
     private CameraManager cameraManager;
     private final Paint paint;
     private Bitmap resultBitmap;
-    private Bitmap linnerBitmap;
     private final int maskColor;
     private final int resultColor;
     private final int laserColor;
-    private final int frameColor;
     private final int resultPointColor;
     private int scannerAlpha;
     private List<ResultPoint> possibleResultPoints;
@@ -67,19 +62,16 @@ public final class ViewfinderView extends View {
     public ViewfinderView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        // Initialize these once for performance rather than calling them every
-        // time in onDraw().
+        // Initialize these once for performance rather than calling them every time in onDraw().
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         Resources resources = getResources();
         maskColor = resources.getColor(R.color.viewfinder_mask);
         resultColor = resources.getColor(R.color.result_view);
         laserColor = resources.getColor(R.color.viewfinder_laser);
-        frameColor = resources.getColor(R.color.viewfinder_frame);
         resultPointColor = resources.getColor(R.color.possible_result_points);
         scannerAlpha = 0;
         possibleResultPoints = new ArrayList<>(5);
         lastPossibleResultPoints = null;
-
     }
 
     public void setCameraManager(CameraManager cameraManager) {
@@ -100,40 +92,12 @@ public final class ViewfinderView extends View {
         int width = canvas.getWidth();
         int height = canvas.getHeight();
 
-//        if (linnerBitmap == null) {
-//            linnerBitmap = BitmapFactory.decodeResource(getResources(),
-//                    R.drawable.barcodescanner_line);
-//            Matrix matrix = new Matrix();
-//            matrix.setScale((width * 4 / 5f - 2 * PADDING) / linnerBitmap.getWidth(), 1f);
-//            linnerBitmap = Bitmap.createBitmap(linnerBitmap, 0, 0, linnerBitmap.getWidth(),
-//                    linnerBitmap.getHeight(), matrix, true);
-//        }
         // Draw the exterior (i.e. outside the framing rect) darkened
-        // paint.setColor(resultBitmap != null ? resultColor : maskColor);
-        // canvas.drawRect(0, 0, width, frame.top, paint);
-        // canvas.drawRect(0, frame.top, frame.left, frame.bottom + 1, paint);
-        // canvas.drawRect(frame.right + 1, frame.top, width, frame.bottom + 1,
-        // paint);
-        // canvas.drawRect(0, frame.bottom + 1, width, height, paint);
-
-        // paint.setColor(frameColor);
-        // canvas.drawRect(frame.left, frame.top - 3, frame.left + 100,
-        // frame.top + 3, paint);
-        // canvas.drawRect(frame.right - 100, frame.top - 3, frame.right,
-        // frame.top + 3, paint);
-        // canvas.drawRect(frame.left, frame.bottom - 3, frame.left + 100,
-        // frame.bottom + 3, paint);
-        // canvas.drawRect(frame.right - 100, frame.bottom - 3, frame.right,
-        // frame.bottom + 3, paint);
-        //
-        // canvas.drawRect(frame.left - 3, frame.top, frame.left + 3, frame.top
-        // + 100, paint);
-        // canvas.drawRect(frame.right - 3, frame.top, frame.right + 3,
-        // frame.top + 100, paint);
-        // canvas.drawRect(frame.left - 3, frame.bottom - 100, frame.left + 3,
-        // frame.bottom, paint);
-        // canvas.drawRect(frame.right - 3, frame.bottom - 100, frame.right + 3,
-        // frame.bottom, paint);
+        paint.setColor(resultBitmap != null ? resultColor : maskColor);
+        canvas.drawRect(0, 0, width, frame.top, paint);
+        canvas.drawRect(0, frame.top, frame.left, frame.bottom + 1, paint);
+        canvas.drawRect(frame.right + 1, frame.top, width, frame.bottom + 1, paint);
+        canvas.drawRect(0, frame.bottom + 1, width, height, paint);
 
         if (resultBitmap != null) {
             // Draw the opaque result bitmap over the scanning rectangle
@@ -141,56 +105,55 @@ public final class ViewfinderView extends View {
             canvas.drawBitmap(resultBitmap, null, frame, paint);
         } else {
 
-            // Draw a red "laser scanner" line through the middle to show
-            // decoding is active
-            // paint.setColor(laserColor);
+            // Draw a red "laser scanner" line through the middle to show decoding is active
+            paint.setColor(laserColor);
             paint.setAlpha(SCANNER_ALPHA[scannerAlpha]);
             scannerAlpha = (scannerAlpha + 1) % SCANNER_ALPHA.length;
-//            canvas.drawBitmap(linnerBitmap, width / 10f + PADDING, height * 526 / 852f, paint);
-            // int middle = frame.height() / 2 + frame.top;
-            // canvas.drawRect(frame.left + 2, middle - 2, frame.right - 1,
-            // middle + 2, paint);
+            int middle = frame.height() / 2 + frame.top;
+            canvas.drawRect(frame.left + 2, middle - 1, frame.right - 1, middle + 2, paint);
 
-            // float scaleX = frame.width() / (float) previewFrame.width();
-            // float scaleY = frame.height() / (float) previewFrame.height();
+            float scaleX = frame.width() / (float) previewFrame.width();
+            float scaleY = frame.height() / (float) previewFrame.height();
 
-            // List<ResultPoint> currentPossible = possibleResultPoints;
-            // List<ResultPoint> currentLast = lastPossibleResultPoints;
-            // int frameLeft = frame.left;
-            // int frameTop = frame.top;
-            // if (currentPossible.isEmpty()) {
-            // lastPossibleResultPoints = null;
-            // } else {
-            // possibleResultPoints = new ArrayList<>(5);
-            // lastPossibleResultPoints = currentPossible;
-            // paint.setAlpha(CURRENT_POINT_OPACITY);
-            // paint.setColor(resultPointColor);
-            // synchronized (currentPossible) {
-            // for (ResultPoint point : currentPossible) {
-            // canvas.drawCircle(frameLeft + (int) (point.getX() * scaleX),
-            // frameTop
-            // + (int) (point.getY() * scaleY), POINT_SIZE, paint);
-            // }
-            // }
-            // }
-            // if (currentLast != null) {
-            // paint.setAlpha(CURRENT_POINT_OPACITY / 2);
-            // paint.setColor(resultPointColor);
-            // synchronized (currentLast) {
-            // float radius = POINT_SIZE / 2.0f;
-            // for (ResultPoint point : currentLast) {
-            // canvas.drawCircle(frameLeft + (int) (point.getX() * scaleX),
-            // frameTop
-            // + (int) (point.getY() * scaleY), radius, paint);
-            // }
-            // }
-            // }
+            List<ResultPoint> currentPossible = possibleResultPoints;
+            List<ResultPoint> currentLast = lastPossibleResultPoints;
+            int frameLeft = frame.left;
+            int frameTop = frame.top;
+            if (currentPossible.isEmpty()) {
+                lastPossibleResultPoints = null;
+            } else {
+                possibleResultPoints = new ArrayList<>(5);
+                lastPossibleResultPoints = currentPossible;
+                paint.setAlpha(CURRENT_POINT_OPACITY);
+                paint.setColor(resultPointColor);
+                synchronized (currentPossible) {
+                    for (ResultPoint point : currentPossible) {
+                        canvas.drawCircle(frameLeft + (int) (point.getX() * scaleX),
+                                frameTop + (int) (point.getY() * scaleY),
+                                POINT_SIZE, paint);
+                    }
+                }
+            }
+            if (currentLast != null) {
+                paint.setAlpha(CURRENT_POINT_OPACITY / 2);
+                paint.setColor(resultPointColor);
+                synchronized (currentLast) {
+                    float radius = POINT_SIZE / 2.0f;
+                    for (ResultPoint point : currentLast) {
+                        canvas.drawCircle(frameLeft + (int) (point.getX() * scaleX),
+                                frameTop + (int) (point.getY() * scaleY),
+                                radius, paint);
+                    }
+                }
+            }
 
-            // Request another update at the animation interval, but only
-            // repaint the laser line,
+            // Request another update at the animation interval, but only repaint the laser line,
             // not the entire viewfinder mask.
-            postInvalidateDelayed(ANIMATION_DELAY, frame.left - POINT_SIZE, frame.top - POINT_SIZE,
-                    frame.right + POINT_SIZE, frame.bottom + POINT_SIZE);
+            postInvalidateDelayed(ANIMATION_DELAY,
+                    frame.left - POINT_SIZE,
+                    frame.top - POINT_SIZE,
+                    frame.right + POINT_SIZE,
+                    frame.bottom + POINT_SIZE);
         }
     }
 
@@ -204,8 +167,7 @@ public final class ViewfinderView extends View {
     }
 
     /**
-     * Draw a bitmap with the result points highlighted instead of the live
-     * scanning display.
+     * Draw a bitmap with the result points highlighted instead of the live scanning display.
      *
      * @param barcode An image of the decoded barcode.
      */

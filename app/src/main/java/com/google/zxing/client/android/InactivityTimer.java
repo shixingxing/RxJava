@@ -25,9 +25,10 @@ import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.util.Log;
 
+import java.util.concurrent.RejectedExecutionException;
+
 /**
- * Finishes an activity after a period of inactivity if the device is on battery
- * power.
+ * Finishes an activity after a period of inactivity if the device is on battery power.
  */
 final class InactivityTimer {
 
@@ -50,10 +51,14 @@ final class InactivityTimer {
     synchronized void onActivity() {
         cancel();
         inactivityTask = new InactivityAsyncTask();
-        inactivityTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        try {
+            inactivityTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } catch (RejectedExecutionException ree) {
+            Log.w(TAG, "Couldn't schedule inactivity task; ignoring");
+        }
     }
 
-    public synchronized void onPause() {
+    synchronized void onPause() {
         cancel();
         if (registered) {
             activity.unregisterReceiver(powerStatusReceiver);
@@ -63,12 +68,11 @@ final class InactivityTimer {
         }
     }
 
-    public synchronized void onResume() {
+    synchronized void onResume() {
         if (registered) {
             Log.w(TAG, "PowerStatusReceiver was already registered?");
         } else {
-            activity.registerReceiver(powerStatusReceiver, new IntentFilter(
-                    Intent.ACTION_BATTERY_CHANGED));
+            activity.registerReceiver(powerStatusReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
             registered = true;
         }
         onActivity();

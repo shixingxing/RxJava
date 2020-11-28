@@ -20,7 +20,6 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
@@ -47,8 +46,10 @@ final class DecodeThread extends Thread {
     private Handler handler;
     private final CountDownLatch handlerInitLatch;
 
-    DecodeThread(CaptureActivity activity, Collection<BarcodeFormat> decodeFormats,
-                 Map<DecodeHintType, ?> baseHints, String characterSet,
+    DecodeThread(CaptureActivity activity,
+                 Collection<BarcodeFormat> decodeFormats,
+                 Map<DecodeHintType, ?> baseHints,
+                 String characterSet,
                  ResultPointCallback resultPointCallback) {
 
         this.activity = activity;
@@ -59,8 +60,7 @@ final class DecodeThread extends Thread {
             hints.putAll(baseHints);
         }
 
-        // The prefs can't change while the thread is running, so pick them up
-        // once here.
+        // The prefs can't change while the thread is running, so pick them up once here.
         if (decodeFormats == null || decodeFormats.isEmpty()) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
             decodeFormats = EnumSet.noneOf(BarcodeFormat.class);
@@ -89,7 +89,6 @@ final class DecodeThread extends Thread {
             hints.put(DecodeHintType.CHARACTER_SET, characterSet);
         }
         hints.put(DecodeHintType.NEED_RESULT_POINT_CALLBACK, resultPointCallback);
-        Log.i("DecodeThread", "Hints: " + hints);
     }
 
     Handler getHandler() {

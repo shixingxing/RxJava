@@ -42,11 +42,17 @@ final class DecodeFormatManager {
     static final Set<BarcodeFormat> PDF417_FORMATS = EnumSet.of(BarcodeFormat.PDF_417);
 
     static {
-        PRODUCT_FORMATS = EnumSet.of(BarcodeFormat.UPC_A, BarcodeFormat.UPC_E,
-                BarcodeFormat.EAN_13, BarcodeFormat.EAN_8, BarcodeFormat.RSS_14,
+        PRODUCT_FORMATS = EnumSet.of(BarcodeFormat.UPC_A,
+                BarcodeFormat.UPC_E,
+                BarcodeFormat.EAN_13,
+                BarcodeFormat.EAN_8,
+                BarcodeFormat.RSS_14,
                 BarcodeFormat.RSS_EXPANDED);
-        INDUSTRIAL_FORMATS = EnumSet.of(BarcodeFormat.CODE_39, BarcodeFormat.CODE_93,
-                BarcodeFormat.CODE_128, BarcodeFormat.ITF, BarcodeFormat.CODABAR);
+        INDUSTRIAL_FORMATS = EnumSet.of(BarcodeFormat.CODE_39,
+                BarcodeFormat.CODE_93,
+                BarcodeFormat.CODE_128,
+                BarcodeFormat.ITF,
+                BarcodeFormat.CODABAR);
         ONE_D_FORMATS = EnumSet.copyOf(PRODUCT_FORMATS);
         ONE_D_FORMATS.addAll(INDUSTRIAL_FORMATS);
     }
@@ -83,8 +89,7 @@ final class DecodeFormatManager {
         return parseDecodeFormats(formats, inputUri.getQueryParameter(Intents.Scan.MODE));
     }
 
-    private static Set<BarcodeFormat> parseDecodeFormats(Iterable<String> scanFormats,
-                                                         String decodeMode) {
+    private static Set<BarcodeFormat> parseDecodeFormats(Iterable<String> scanFormats, String decodeMode) {
         if (scanFormats != null) {
             Set<BarcodeFormat> formats = EnumSet.noneOf(BarcodeFormat.class);
             try {

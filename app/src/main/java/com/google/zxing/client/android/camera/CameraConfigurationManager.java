@@ -23,21 +23,29 @@ import android.hardware.Camera;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Display;
+import android.view.Surface;
 import android.view.WindowManager;
 
 import com.google.zxing.client.android.PreferencesActivity;
+import com.google.zxing.client.android.camera.open.CameraFacing;
+import com.google.zxing.client.android.camera.open.OpenCamera;
 
 /**
- * A class which deals with reading, parsing, and setting the camera parameters
- * which are used to configure the camera hardware.
+ * A class which deals with reading, parsing, and setting the camera parameters which are used to
+ * configure the camera hardware.
  */
+@SuppressWarnings("deprecation") // camera APIs
 final class CameraConfigurationManager {
 
     private static final String TAG = "CameraConfiguration";
 
     private final Context context;
+    private int cwNeededRotation;
+    private int cwRotationFromDisplayToCamera;
     private Point screenResolution;
     private Point cameraResolution;
+    private Point bestPreviewSize;
+    private Point previewSizeOnScreen;
 
     CameraConfigurationManager(Context context) {
         this.context = context;
@@ -46,25 +54,97 @@ final class CameraConfigurationManager {
     /**
      * Reads, one time, values from the camera that are needed by the app.
      */
-    void initFromCameraParameters(Camera camera) {
-        Camera.Parameters parameters = camera.getParameters();
+    void initFromCameraParameters(OpenCamera camera) {
+        Camera.Parameters parameters = camera.getCamera().getParameters();
         WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = manager.getDefaultDisplay();
+
+        int displayRotation = display.getRotation();
+        int cwRotationFromNaturalToDisplay;
+        switch (displayRotation) {
+            case Surface.ROTATION_0:
+                cwRotationFromNaturalToDisplay = 0;
+                break;
+            case Surface.ROTATION_90:
+                cwRotationFromNaturalToDisplay = 90;
+                break;
+            case Surface.ROTATION_180:
+                cwRotationFromNaturalToDisplay = 180;
+                break;
+            case Surface.ROTATION_270:
+                cwRotationFromNaturalToDisplay = 270;
+                break;
+            default:
+                // Have seen this return incorrect values like -90
+                if (displayRotation % 90 == 0) {
+                    cwRotationFromNaturalToDisplay = (360 + displayRotation) % 360;
+                } else {
+                    throw new IllegalArgumentException("Bad rotation: " + displayRotation);
+                }
+        }
+        Log.i(TAG, "Display at: " + cwRotationFromNaturalToDisplay);
+
+        int cwRotationFromNaturalToCamera = camera.getOrientation();
+        Log.i(TAG, "Camera at: " + cwRotationFromNaturalToCamera);
+
+        // Still not 100% sure about this. But acts like we need to flip this:
+        if (camera.getFacing() == CameraFacing.FRONT) {
+            cwRotationFromNaturalToCamera = (360 - cwRotationFromNaturalToCamera) % 360;
+            Log.i(TAG, "Front camera overriden to: " + cwRotationFromNaturalToCamera);
+        }
+
+    /*
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    String overrideRotationString;
+    if (camera.getFacing() == CameraFacing.FRONT) {
+      overrideRotationString = prefs.getString(PreferencesActivity.KEY_FORCE_CAMERA_ORIENTATION_FRONT, null);
+    } else {
+      overrideRotationString = prefs.getString(PreferencesActivity.KEY_FORCE_CAMERA_ORIENTATION, null);
+    }
+    if (overrideRotationString != null && !"-".equals(overrideRotationString)) {
+      Log.i(TAG, "Overriding camera manually to " + overrideRotationString);
+      cwRotationFromNaturalToCamera = Integer.parseInt(overrideRotationString);
+    }
+     */
+
+        cwRotationFromDisplayToCamera =
+                (360 + cwRotationFromNaturalToCamera - cwRotationFromNaturalToDisplay) % 360;
+        Log.i(TAG, "Final display orientation: " + cwRotationFromDisplayToCamera);
+        if (camera.getFacing() == CameraFacing.FRONT) {
+            Log.i(TAG, "Compensating rotation for front camera");
+            cwNeededRotation = (360 - cwRotationFromDisplayToCamera) % 360;
+        } else {
+            cwNeededRotation = cwRotationFromDisplayToCamera;
+        }
+        Log.i(TAG, "Clockwise rotation from display to camera: " + cwNeededRotation);
+
         Point theScreenResolution = new Point();
         display.getSize(theScreenResolution);
         screenResolution = theScreenResolution;
-        Log.i(TAG, "Screen resolution: " + screenResolution);
-        cameraResolution = CameraConfigurationUtils.findBestPreviewSizeValue(parameters,
-                screenResolution);
+        Log.i(TAG, "Screen resolution in current orientation: " + screenResolution);
+        cameraResolution = CameraConfigurationUtils.findBestPreviewSizeValue(parameters, screenResolution);
         Log.i(TAG, "Camera resolution: " + cameraResolution);
+        bestPreviewSize = CameraConfigurationUtils.findBestPreviewSizeValue(parameters, screenResolution);
+        Log.i(TAG, "Best available preview size: " + bestPreviewSize);
+
+        boolean isScreenPortrait = screenResolution.x < screenResolution.y;
+        boolean isPreviewSizePortrait = bestPreviewSize.x < bestPreviewSize.y;
+
+        if (isScreenPortrait == isPreviewSizePortrait) {
+            previewSizeOnScreen = bestPreviewSize;
+        } else {
+            previewSizeOnScreen = new Point(bestPreviewSize.y, bestPreviewSize.x);
+        }
+        Log.i(TAG, "Preview size on screen: " + previewSizeOnScreen);
     }
 
-    void setDesiredCameraParameters(Camera camera, boolean safeMode) {
-        Camera.Parameters parameters = camera.getParameters();
+    void setDesiredCameraParameters(OpenCamera camera, boolean safeMode) {
+
+        Camera theCamera = camera.getCamera();
+        Camera.Parameters parameters = theCamera.getParameters();
 
         if (parameters == null) {
-            Log.w(TAG,
-                    "Device error: no camera parameters are available. Proceeding without configuration.");
+            Log.w(TAG, "Device error: no camera parameters are available. Proceeding without configuration.");
             return;
         }
 
@@ -78,9 +158,11 @@ final class CameraConfigurationManager {
 
         initializeTorch(parameters, prefs, safeMode);
 
-        CameraConfigurationUtils.setFocus(parameters,
+        CameraConfigurationUtils.setFocus(
+                parameters,
                 prefs.getBoolean(PreferencesActivity.KEY_AUTO_FOCUS, true),
-                prefs.getBoolean(PreferencesActivity.KEY_DISABLE_CONTINUOUS_FOCUS, true), safeMode);
+                prefs.getBoolean(PreferencesActivity.KEY_DISABLE_CONTINUOUS_FOCUS, false),
+                safeMode);
 
         if (!safeMode) {
             if (prefs.getBoolean(PreferencesActivity.KEY_INVERT_SCAN, false)) {
@@ -97,24 +179,34 @@ final class CameraConfigurationManager {
                 CameraConfigurationUtils.setMetering(parameters);
             }
 
+            //SetRecordingHint to true also a workaround for low framerate on Nexus 4
+            //https://stackoverflow.com/questions/14131900/extreme-camera-lag-on-nexus-4
+            parameters.setRecordingHint(true);
+
         }
 
-        parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
+        parameters.setPreviewSize(bestPreviewSize.x, bestPreviewSize.y);
 
-        Log.i(TAG, "Final camera parameters: " + parameters.flatten());
+        theCamera.setParameters(parameters);
 
-        camera.setParameters(parameters);
+        theCamera.setDisplayOrientation(cwRotationFromDisplayToCamera);
 
-        Camera.Parameters afterParameters = camera.getParameters();
+        Camera.Parameters afterParameters = theCamera.getParameters();
         Camera.Size afterSize = afterParameters.getPreviewSize();
-        if (afterSize != null
-                && (cameraResolution.x != afterSize.width || cameraResolution.y != afterSize.height)) {
-            Log.w(TAG, "Camera said it supported preview size " + cameraResolution.x + 'x'
-                    + cameraResolution.y + ", but after setting it, preview size is "
-                    + afterSize.width + 'x' + afterSize.height);
-            cameraResolution.x = afterSize.width;
-            cameraResolution.y = afterSize.height;
+        if (afterSize != null && (bestPreviewSize.x != afterSize.width || bestPreviewSize.y != afterSize.height)) {
+            Log.w(TAG, "Camera said it supported preview size " + bestPreviewSize.x + 'x' + bestPreviewSize.y +
+                    ", but after setting it, preview size is " + afterSize.width + 'x' + afterSize.height);
+            bestPreviewSize.x = afterSize.width;
+            bestPreviewSize.y = afterSize.height;
         }
+    }
+
+    Point getBestPreviewSize() {
+        return bestPreviewSize;
+    }
+
+    Point getPreviewSizeOnScreen() {
+        return previewSizeOnScreen;
     }
 
     Point getCameraResolution() {
@@ -125,14 +217,18 @@ final class CameraConfigurationManager {
         return screenResolution;
     }
 
+    int getCWNeededRotation() {
+        return cwNeededRotation;
+    }
+
     boolean getTorchState(Camera camera) {
         if (camera != null) {
             Camera.Parameters parameters = camera.getParameters();
             if (parameters != null) {
                 String flashMode = parameters.getFlashMode();
-                return flashMode != null
-                        && (Camera.Parameters.FLASH_MODE_ON.equals(flashMode) || Camera.Parameters.FLASH_MODE_TORCH
-                        .equals(flashMode));
+                return
+                        Camera.Parameters.FLASH_MODE_ON.equals(flashMode) ||
+                                Camera.Parameters.FLASH_MODE_TORCH.equals(flashMode);
             }
         }
         return false;
@@ -144,8 +240,7 @@ final class CameraConfigurationManager {
         camera.setParameters(parameters);
     }
 
-    private void initializeTorch(Camera.Parameters parameters, SharedPreferences prefs,
-                                 boolean safeMode) {
+    private void initializeTorch(Camera.Parameters parameters, SharedPreferences prefs, boolean safeMode) {
         boolean currentSetting = FrontLightMode.readPref(prefs) == FrontLightMode.ON;
         doSetTorch(parameters, currentSetting, safeMode);
     }
