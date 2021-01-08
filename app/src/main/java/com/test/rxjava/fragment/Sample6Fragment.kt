@@ -13,21 +13,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.PermissionChecker
 import com.test.rxjava.BaseFragment
-import com.test.rxjava.R
-import kotlinx.android.synthetic.main.fragment_sample6.*
+import com.test.rxjava.databinding.FragmentSample6Binding
 
 class Sample6Fragment : BaseFragment() {
 
     val TAG = Sample6Fragment::class.java.simpleName
 
     lateinit var bluetoothAdapter: BluetoothAdapter
+    private lateinit var mBinding: FragmentSample6Binding
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_sample6, container, false)
+        mBinding = FragmentSample6Binding.inflate(inflater)
+        return mBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        blue_tooth.setOnCheckedChangeListener { buttonView, isChecked ->
+        mBinding.blueTooth.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 if (!bluetoothAdapter.isEnabled) {
                     bluetoothAdapter.enable()
@@ -39,7 +40,7 @@ class Sample6Fragment : BaseFragment() {
             }
         }
 
-        scan.setOnClickListener { scanDevice() }
+        mBinding.scan.setOnClickListener { scanDevice() }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -50,7 +51,7 @@ class Sample6Fragment : BaseFragment() {
                 == PermissionChecker.PERMISSION_GRANTED) {
             bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
             //设置当前状态
-            blue_tooth.isChecked = bluetoothAdapter.isEnabled
+            mBinding.blueTooth.isChecked = bluetoothAdapter.isEnabled
         } else {
             //还没有权限
             requestPermissions(arrayOf(Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN, Manifest.permission.ACCESS_FINE_LOCATION), 2333)
@@ -62,7 +63,7 @@ class Sample6Fragment : BaseFragment() {
         if (requestCode == 2333) {
             bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
             //设置当前状态
-            blue_tooth.isChecked = bluetoothAdapter.isEnabled
+            mBinding.blueTooth.isChecked = bluetoothAdapter.isEnabled
         }
     }
 

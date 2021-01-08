@@ -11,8 +11,7 @@ import androidx.core.content.PermissionChecker
 import androidx.navigation.Navigation
 import com.test.rxjava.BaseFragment
 import com.test.rxjava.CaptureActivity
-import com.test.rxjava.R
-import kotlinx.android.synthetic.main.fragment_main.*
+import com.test.rxjava.databinding.FragmentMainBinding
 
 class MainFragment : BaseFragment() {
 
@@ -20,14 +19,16 @@ class MainFragment : BaseFragment() {
         const val REQUEST_CAMERA = 1000
     }
 
+    private lateinit var mBinding: FragmentMainBinding
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_main, container, false)
+        mBinding = FragmentMainBinding.inflate(inflater)
+        return mBinding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        sample1.setOnClickListener { v ->
+        mBinding.sample1.setOnClickListener {
 //            Navigation.findNavController(v).navigate(MainFragmentDirections.sample1Action())
             context?.let {
                 if (PermissionChecker.checkSelfPermission(it, Manifest.permission.CAMERA) != PermissionChecker.PERMISSION_GRANTED) {
@@ -38,28 +39,28 @@ class MainFragment : BaseFragment() {
             }
 
         }
-        sample2.setOnClickListener { v ->
+        mBinding.sample2.setOnClickListener { v ->
             Navigation.findNavController(v).navigate(MainFragmentDirections.sample2Action())
         }
-        sample3.setOnClickListener { v ->
+        mBinding.sample3.setOnClickListener { v ->
             Navigation.findNavController(v).navigate(MainFragmentDirections.sample3Action())
         }
-        sample4.setOnClickListener { v ->
+        mBinding.sample4.setOnClickListener { v ->
             Navigation.findNavController(v).navigate(MainFragmentDirections.sample4Action())
         }
-        sample5.setOnClickListener { v ->
+        mBinding.sample5.setOnClickListener { v ->
             Navigation.findNavController(v).navigate(MainFragmentDirections.sample5Action())
         }
-        sample6.setOnClickListener { v ->
+        mBinding.sample6.setOnClickListener { v ->
             Navigation.findNavController(v).navigate(MainFragmentDirections.sample6Action())
         }
-        sample7.setOnClickListener { v ->
+        mBinding.sample7.setOnClickListener { v ->
             Navigation.findNavController(v).navigate(MainFragmentDirections.sample7Action())
         }
-        sample8.setOnClickListener { v ->
+        mBinding.sample8.setOnClickListener { v ->
             Navigation.findNavController(v).navigate(MainFragmentDirections.sample8Action())
         }
-        sample9.setOnClickListener { v ->
+        mBinding.sample9.setOnClickListener { v ->
             Navigation.findNavController(v).navigate(MainFragmentDirections.sample9Action())
         }
     }

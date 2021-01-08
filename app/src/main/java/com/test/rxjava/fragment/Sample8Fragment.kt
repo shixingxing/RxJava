@@ -12,29 +12,29 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.PermissionChecker
 import com.byox.drawview.enums.DrawingCapture
 import com.test.rxjava.BaseFragment
-import com.test.rxjava.R
+import com.test.rxjava.databinding.FragmentSample8Binding
 import com.test.rxjava.dialog.SaveBitmapDialog
-import kotlinx.android.synthetic.main.fragment_sample8.*
 
 public class Sample8Fragment : BaseFragment() {
 
     // CONSTANTS
     private val STORAGE_PERMISSIONS = 1000
-
+    private lateinit var mBinding: FragmentSample8Binding
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_sample8, container, false)
+        mBinding = FragmentSample8Binding.inflate(inflater)
+        return mBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        save.setOnClickListener {
+        mBinding.save.setOnClickListener {
             requestPermissions()
         }
     }
 
     private fun saveDraw() {
         val saveBitmapDialog: SaveBitmapDialog = SaveBitmapDialog.newInstance()
-        val createCaptureResponse: Array<Any> = draw_view.createCapture(DrawingCapture.BITMAP)
+        val createCaptureResponse: Array<Any> = mBinding.drawView.createCapture(DrawingCapture.BITMAP)
         saveBitmapDialog.setPreviewBitmap(createCaptureResponse[0] as Bitmap)
         saveBitmapDialog.setPreviewFormat(createCaptureResponse[1].toString())
         saveBitmapDialog.setOnSaveBitmapListener(object : SaveBitmapDialog.OnSaveBitmapListener {
@@ -54,7 +54,7 @@ public class Sample8Fragment : BaseFragment() {
             return
         }
         if (PermissionChecker.checkSelfPermission(requireActivity(),
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE) !== PermissionChecker.PERMISSION_GRANTED) {
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PermissionChecker.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(requireActivity(), arrayOf(
                     Manifest.permission.WRITE_EXTERNAL_STORAGE),
                     STORAGE_PERMISSIONS)

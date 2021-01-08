@@ -8,8 +8,7 @@ import android.widget.Toast
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import com.test.rxjava.BaseFragment
-import com.test.rxjava.R
-import kotlinx.android.synthetic.main.fragment_sample7.*
+import com.test.rxjava.databinding.FragmentSample7Binding
 import java.util.concurrent.Executor
 
 class Sample7Fragment : BaseFragment() {
@@ -18,6 +17,7 @@ class Sample7Fragment : BaseFragment() {
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
+    private lateinit var mBinding: FragmentSample7Binding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,12 +56,13 @@ class Sample7Fragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_sample7, container, false)
+        mBinding = FragmentSample7Binding.inflate(inflater)
+        return mBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        login.setOnClickListener {
+        mBinding.login.setOnClickListener {
             login()
         }
     }
