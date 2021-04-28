@@ -92,7 +92,7 @@ class Sample6Fragment : BaseFragment() {
     private val leScanner = object : BluetoothAdapter.LeScanCallback {
 
         override fun onLeScan(device: BluetoothDevice?, rssi: Int, scanRecord: ByteArray?) {
-            Log.i(TAG, device?.name)
+            Log.i(TAG, device?.name ?: "")
         }
     }
 
