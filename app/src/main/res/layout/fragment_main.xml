@@ -37,7 +37,7 @@
             android:layout_margin="15dp"
             android:background="@drawable/white_button"
             android:gravity="center"
-            android:text="sample3"
+            android:text="CameraX"
             android:textColor="#000000"
             android:textSize="16sp" />
 

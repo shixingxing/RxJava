@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.core.content.PermissionChecker
 import androidx.navigation.Navigation
 import com.test.rxjava.BaseFragment
+import com.test.rxjava.CameraXActivity
 import com.test.rxjava.CaptureActivity
 import com.test.rxjava.databinding.FragmentMainBinding
 
@@ -43,7 +44,10 @@ class MainFragment : BaseFragment() {
             Navigation.findNavController(v).navigate(MainFragmentDirections.sample2Action())
         }
         mBinding.sample3.setOnClickListener { v ->
-            Navigation.findNavController(v).navigate(MainFragmentDirections.sample3Action())
+//            Navigation.findNavController(v).navigate(MainFragmentDirections.sample3Action())
+            context?.let {
+                startActivity(Intent(it, CameraXActivity::class.java))
+            }
         }
         mBinding.sample4.setOnClickListener { v ->
             Navigation.findNavController(v).navigate(MainFragmentDirections.sample4Action())
