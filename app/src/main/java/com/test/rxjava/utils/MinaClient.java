@@ -17,7 +17,8 @@ import org.apache.mina.transport.socket.nio.NioSocketConnector;
 
 import java.net.InetSocketAddress;
 
-import io.reactivex.ObservableEmitter;
+import io.reactivex.rxjava3.core.ObservableEmitter;
+
 
 public class MinaClient {
 
@@ -25,7 +26,7 @@ public class MinaClient {
     NioSocketConnector mSocketConnector;
 
     public void start() {
-         mSocketConnector = new NioSocketConnector();
+        mSocketConnector = new NioSocketConnector();
         //设置协议封装解析处理
         mSocketConnector.getFilterChain().addLast("protocol", new ProtocolCodecFilter(new FrameCodecFactory()));
         //设置心跳包

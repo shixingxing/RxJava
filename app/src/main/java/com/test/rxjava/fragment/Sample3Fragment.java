@@ -11,13 +11,13 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.test.rxjava.BaseFragment;
-import com.test.rxjava.R;
 import com.test.rxjava.databinding.FragmentSample3Binding;
 import com.test.rxjava.utils.RxUtil;
 import com.test.rxjava.viewmodel.Sample3ViewModel;
 
-import io.reactivex.ObservableEmitter;
-import io.reactivex.observers.DisposableObserver;
+import io.reactivex.rxjava3.core.ObservableEmitter;
+import io.reactivex.rxjava3.observers.DisposableObserver;
+
 
 /**
  * 生命周期与线程控制

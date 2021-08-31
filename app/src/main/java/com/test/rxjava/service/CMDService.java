@@ -17,8 +17,8 @@ import com.text.rxjava.ICMDCallBack;
 
 import java.io.FileInputStream;
 
-import io.reactivex.ObservableEmitter;
-import io.reactivex.observers.DisposableObserver;
+import io.reactivex.rxjava3.core.ObservableEmitter;
+import io.reactivex.rxjava3.observers.DisposableObserver;
 
 public class CMDService extends Service {
 

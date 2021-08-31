@@ -53,22 +53,17 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.3.0'
-    implementation 'androidx.recyclerview:recyclerview:1.2.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
 //    implementation "androidx.viewpager2:viewpager2:1.0.0"
     implementation 'androidx.cardview:cardview:1.0.0'
     //rxjava
-    implementation "io.reactivex.rxjava2:rxjava:2.2.19"
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation "io.reactivex.rxjava3:rxjava:3.1.1"
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
 
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
-    // Litho
-//    implementation 'com.facebook.litho:litho-core:0.25.0'
-//    implementation 'com.facebook.litho:litho-widget:0.25.0'
-//
-//    annotationProcessor 'com.facebook.litho:litho-processor:0.25.0'
     // multidex
     implementation "androidx.multidex:multidex:2.0.1"
 
@@ -77,23 +72,13 @@ dependencies {
     // navigation
     implementation "androidx.navigation:navigation-fragment-ktx:2.3.5"
     implementation "androidx.navigation:navigation-ui-ktx:2.3.5"
-//    // Litho
-//    implementation 'com.facebook.litho:litho-core:0.25.0'
-//    implementation 'com.facebook.litho:litho-widget:0.25.0'
-//
-//    annotationProcessor 'com.facebook.litho:litho-processor:0.25.0'
-//
-//    // SoLoader
-//    implementation 'com.facebook.soloader:soloader:0.6.0'
-//
-//    // For integration with Fresco
-//    implementation 'com.facebook.litho:litho-fresco:0.25.0'
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'org.apache.mina:mina-core:2.1.4'
 
     implementation "androidx.work:work-runtime:2.5.0"
-    implementation "androidx.work:work-rxjava2:2.5.0"
-    implementation 'com.google.guava:guava:30.1-android'
+    implementation "androidx.work:work-rxjava3:2.5.0"
+    implementation 'com.google.guava:guava:30.1.1-android'
 
     implementation "androidx.biometric:biometric:1.1.0"
 
@@ -108,6 +93,6 @@ dependencies {
     implementation "androidx.camera:camera-camera2:${camerax_version}"
     // If you want to additionally use the CameraX Lifecycle library
     implementation "androidx.camera:camera-lifecycle:${camerax_version}"
-    implementation "androidx.camera:camera-view:1.0.0-alpha24"
+    implementation "androidx.camera:camera-view:1.0.0-alpha28"
 
 }
