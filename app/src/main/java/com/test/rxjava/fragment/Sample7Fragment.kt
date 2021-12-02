@@ -21,16 +21,21 @@ class Sample7Fragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        executor = ContextCompat.getMainExecutor(activity)
-        biometricPrompt = BiometricPrompt(this, executor,
-                object : BiometricPrompt.AuthenticationCallback() {
-                    override fun onAuthenticationError(errorCode: Int,
-                                                       errString: CharSequence) {
-                        super.onAuthenticationError(errorCode, errString)
-                        Toast.makeText(activity,
-                                "Authentication error: $errString", Toast.LENGTH_SHORT)
-                                .show()
-                    }
+        executor = ContextCompat.getMainExecutor(requireContext())
+        biometricPrompt = BiometricPrompt(
+            this, executor,
+            object : BiometricPrompt.AuthenticationCallback() {
+                override fun onAuthenticationError(
+                    errorCode: Int,
+                    errString: CharSequence
+                ) {
+                    super.onAuthenticationError(errorCode, errString)
+                    Toast.makeText(
+                        activity,
+                        "Authentication error: $errString", Toast.LENGTH_SHORT
+                    )
+                        .show()
+                }
 
                     override fun onAuthenticationSucceeded(
                             result: BiometricPrompt.AuthenticationResult) {
