@@ -67,6 +67,9 @@ class MainFragment : BaseFragment() {
         mBinding.sample9.setOnClickListener { v ->
             Navigation.findNavController(v).navigate(MainFragmentDirections.sample9Action())
         }
+        mBinding.sample10.setOnClickListener { v ->
+            Navigation.findNavController(v).navigate(MainFragmentDirections.sample10Action())
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
