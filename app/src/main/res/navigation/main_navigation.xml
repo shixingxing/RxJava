@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     app:startDestination="@id/main_dest">
 
-
     <fragment
         android:id="@+id/main_dest"
         android:name="com.test.rxjava.fragment.MainFragment"
@@ -12,7 +11,6 @@
         <action
             android:id="@+id/sample1_action"
             app:destination="@id/sample1_dest" />
-
         <action
             android:id="@+id/sample2_action"
             app:destination="@id/sample2_dest" />
@@ -40,6 +38,9 @@
         <action
             android:id="@+id/sample10_action"
             app:destination="@id/sample10_dest" />
+        <action
+            android:id="@+id/sample11_action"
+            app:destination="@id/sample11_dest" />
     </fragment>
 
 
@@ -88,4 +89,8 @@
         android:id="@+id/sample10_dest"
         android:name="com.test.rxjava.fragment.Sample10Fragment"
         tools:layout="@layout/fragment_sample10" />
+
+    <fragment
+        android:id="@+id/sample11_dest"
+        android:name="com.test.rxjava.fragment.Sample11Fragment" />
 </navigation>
