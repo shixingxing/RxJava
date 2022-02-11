@@ -11,7 +11,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.PermissionChecker
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import com.test.rxjava.BaseFragment
 import com.test.rxjava.databinding.FragmentSample6Binding
 
@@ -19,52 +20,57 @@ class Sample6Fragment : BaseFragment() {
 
     val TAG = Sample6Fragment::class.java.simpleName
 
-    lateinit var bluetoothAdapter: BluetoothAdapter
+    private var bluetoothAdapter: BluetoothAdapter? = null
     private lateinit var mBinding: FragmentSample6Binding
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+    private val permissions = arrayOf(
+        Manifest.permission.BLUETOOTH,
+        Manifest.permission.BLUETOOTH_ADMIN,
+        Manifest.permission.ACCESS_FINE_LOCATION
+    )
+
+    private val launch =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+
+            val iterator = it.iterator()
+            iterator.forEach { item ->
+                if (!item.value) {
+                    Toast.makeText(context, "permission error:" + item.key, Toast.LENGTH_LONG)
+                        .show()
+                    return@registerForActivityResult
+                }
+            }
+
+            bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+            //设置当前状态
+            mBinding.blueTooth.isChecked = bluetoothAdapter?.isEnabled ?: false
+        }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         mBinding = FragmentSample6Binding.inflate(inflater)
         return mBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        launch.launch(permissions)
         mBinding.blueTooth.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                if (!bluetoothAdapter.isEnabled) {
-                    bluetoothAdapter.enable()
+                if (bluetoothAdapter?.isEnabled != true) {
+                    bluetoothAdapter?.enable()
                 }
             } else {
-                if (bluetoothAdapter.isEnabled) {
-                    bluetoothAdapter.disable()
+                if (bluetoothAdapter?.isEnabled == true) {
+                    bluetoothAdapter?.disable()
                 }
             }
         }
 
         mBinding.scan.setOnClickListener { scanDevice() }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        if (PermissionChecker.checkSelfPermission(requireActivity(), Manifest.permission.BLUETOOTH)
-                == PermissionChecker.PERMISSION_GRANTED && PermissionChecker.checkSelfPermission(requireActivity(), Manifest.permission.BLUETOOTH_ADMIN)
-                == PermissionChecker.PERMISSION_GRANTED && PermissionChecker.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
-                == PermissionChecker.PERMISSION_GRANTED) {
-            bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
-            //设置当前状态
-            mBinding.blueTooth.isChecked = bluetoothAdapter.isEnabled
-        } else {
-            //还没有权限
-            requestPermissions(arrayOf(Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN, Manifest.permission.ACCESS_FINE_LOCATION), 2333)
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 2333) {
-            bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
-            //设置当前状态
-            mBinding.blueTooth.isChecked = bluetoothAdapter.isEnabled
-        }
     }
 
     fun scanDevice() {
@@ -73,18 +79,17 @@ class Sample6Fragment : BaseFragment() {
 
     fun startScan() {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            bluetoothAdapter.bluetoothLeScanner.startScan(scanCallback)
+            bluetoothAdapter?.bluetoothLeScanner?.startScan(scanCallback)
         } else {
-            bluetoothAdapter.startLeScan(leScanner)
-
+            bluetoothAdapter?.startLeScan(leScanner)
         }
     }
 
     fun stopScan() {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            bluetoothAdapter.bluetoothLeScanner.stopScan(scanCallback)
+            bluetoothAdapter?.bluetoothLeScanner?.stopScan(scanCallback)
         } else {
-            bluetoothAdapter.stopLeScan(leScanner)
+            bluetoothAdapter?.stopLeScan(leScanner)
 
         }
     }
