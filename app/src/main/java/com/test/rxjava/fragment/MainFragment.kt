@@ -36,9 +36,8 @@ class MainFragment : BaseFragment() {
         return mBinding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         mBinding.sample1.setOnClickListener {
             launchCameraCheck.launch(Manifest.permission.CAMERA)
         }
