@@ -9,7 +9,7 @@ import androidx.work.WorkerParameters
  * 工作 worker
  */
 class SampleWork : Worker {
-    private val key: String?;
+    private val key: String?
 
     constructor(context: Context, workerParams: WorkerParameters) : super(context, workerParams) {
         val data = workerParams.inputData

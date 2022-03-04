@@ -10,6 +10,7 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.test.rxjava.R
+import com.test.rxjava.service.Sample3Worker
 import com.test.rxjava.service.SampleWork
 import java.util.concurrent.TimeUnit
 
@@ -30,7 +31,7 @@ class Sample5Fragment : Fragment() {
         val data = Data.Builder().putString("key","token").build()
 
         val workManager = context?.let { WorkManager.getInstance(it) }
-        workManager?.enqueue(OneTimeWorkRequest.Builder(SampleWork::class.java).setInputData(data).build())
+        workManager?.enqueue(OneTimeWorkRequest.Builder(Sample3Worker::class.java).setInputData(data).build())
 //        workManager?.enqueue(PeriodicWorkRequest.Builder(SampleWork::class.java, 20, TimeUnit.MINUTES).build())
     }
 }
