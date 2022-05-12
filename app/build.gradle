@@ -51,7 +51,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.13.2'
     implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'com.google.android.material:material:1.6.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
 //    implementation "androidx.viewpager2:viewpager2:1.0.0"
     implementation 'androidx.cardview:cardview:1.0.0'
@@ -67,8 +67,8 @@ dependencies {
     implementation "com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7"
 
     // navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:2.4.1"
-    implementation "androidx.navigation:navigation-ui-ktx:2.4.1"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.4.2"
+    implementation "androidx.navigation:navigation-ui-ktx:2.4.2"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'org.apache.mina:mina-core:2.1.4'
@@ -80,14 +80,14 @@ dependencies {
     implementation "androidx.biometric:biometric:1.1.0"
 
     implementation 'com.google.zxing:android-core:3.3.0'
-    implementation 'com.google.zxing:core:3.4.1'
+    implementation 'com.google.zxing:core:3.5.0'
 
     implementation "androidx.camera:camera-core:${camerax_version}"
     implementation "androidx.camera:camera-camera2:${camerax_version}"
     // If you want to additionally use the CameraX Lifecycle library
     implementation "androidx.camera:camera-lifecycle:${camerax_version}"
-    implementation "androidx.camera:camera-view:1.1.0-beta02"
-    implementation "androidx.camera:camera-extensions:1.1.0-beta02"
+    implementation "androidx.camera:camera-view:1.1.0-rc01"
+    implementation "androidx.camera:camera-extensions:1.1.0-rc01"
 
     implementation 'com.github.shixingxing:DrawView:0.0.5'
     implementation 'com.github.shixingxing:PatternLockView:0.0.7'
