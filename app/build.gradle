@@ -65,7 +65,7 @@ dependencies {
     // multidex
     implementation "androidx.multidex:multidex:2.0.1"
 
-    implementation "com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7"
+    implementation "com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.8"
 
     // navigation
     implementation "androidx.navigation:navigation-fragment-ktx:2.4.2"
