@@ -199,29 +199,5 @@ public class CMDService extends Service {
             callBack = null;
         }
 
-        @Override
-        public void push(int offset, int length) throws RemoteException {
-
-            if (pd != null) {
-                Log.i("TTT", "read:" + length + "offset:" + offset);
-
-                try {
-                    byte[] data = new byte[length];
-//                    ParcelFileDescriptor.AutoCloseInputStream inputStream = new ParcelFileDescriptor.AutoCloseInputStream(pd);
-                    FileInputStream fileInputStream = new FileInputStream(pd.getFileDescriptor());
-
-                    fileInputStream.read(data, 0, length);
-                    fileInputStream.close();
-                    Log.i("TTT", String.valueOf(data[0]));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        @Override
-        public void initParcelFileDescriptor(ParcelFileDescriptor fb) throws RemoteException {
-            pd = fb;
-        }
     }
 }

@@ -71,8 +71,7 @@ class Sample10Fragment : BaseFragment() {
     }
 
     class Contract : ActivityResultContract<String, String>() {
-        /** Create an intent that can be used for [Activity.startActivityForResult]  */
-        override fun createIntent(context: Context, input: String?): Intent {
+        override fun createIntent(context: Context, input: String): Intent {
             return Intent(context, StartActivityForResultActivity::class.java).apply {
                 putExtra("input", input)
             }
