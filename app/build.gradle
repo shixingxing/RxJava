@@ -9,6 +9,7 @@ android {
     defaultConfig {
         applicationId "com.test.rxjava"
         minSdkVersion 21
+        //noinspection ExpiringTargetSdkVersion
         targetSdkVersion 31
         versionCode 1
         versionName "1.0"
@@ -82,7 +83,7 @@ dependencies {
     implementation "androidx.biometric:biometric:1.1.0"
 
     implementation 'com.google.zxing:android-core:3.3.0'
-    implementation 'com.google.zxing:core:3.5.0'
+    implementation 'com.google.zxing:core:3.5.1'
 
     implementation "androidx.camera:camera-core:${camerax_version}"
     implementation "androidx.camera:camera-camera2:${camerax_version}"
