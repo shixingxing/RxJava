@@ -1,6 +1,7 @@
 package com.test.rxjava.fragment
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.le.ScanCallback
@@ -55,6 +56,7 @@ class Sample6Fragment : BaseFragment() {
         return mBinding.root
     }
 
+    @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         launch.launch(permissions)
@@ -77,6 +79,7 @@ class Sample6Fragment : BaseFragment() {
         startScan()
     }
 
+    @SuppressLint("MissingPermission")
     fun startScan() {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             bluetoothAdapter?.bluetoothLeScanner?.startScan(scanCallback)
@@ -85,6 +88,7 @@ class Sample6Fragment : BaseFragment() {
         }
     }
 
+    @SuppressLint("MissingPermission")
     fun stopScan() {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             bluetoothAdapter?.bluetoothLeScanner?.stopScan(scanCallback)
@@ -96,17 +100,20 @@ class Sample6Fragment : BaseFragment() {
 
     private val leScanner = object : BluetoothAdapter.LeScanCallback {
 
+        @SuppressLint("MissingPermission")
         override fun onLeScan(device: BluetoothDevice?, rssi: Int, scanRecord: ByteArray?) {
             Log.i(TAG, device?.name ?: "")
         }
     }
 
     private val scanCallback = object : ScanCallback() {
+        @SuppressLint("MissingPermission")
         override fun onBatchScanResults(results: MutableList<ScanResult>?) {
             super.onBatchScanResults(results)
             results?.forEach { Log.i(TAG, it.device.address + it.device?.name) }
         }
 
+        @SuppressLint("MissingPermission")
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
             super.onScanResult(callbackType, result)
             Log.i(TAG, result?.device?.address + result?.device?.name)
