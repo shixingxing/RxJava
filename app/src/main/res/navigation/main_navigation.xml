@@ -41,6 +41,9 @@
         <action
             android:id="@+id/sample11_action"
             app:destination="@id/sample11_dest" />
+        <action
+            android:id="@+id/sample12_action"
+            app:destination="@id/sample12_dest" />
     </fragment>
 
 
@@ -93,4 +96,8 @@
     <fragment
         android:id="@+id/sample11_dest"
         android:name="com.test.rxjava.fragment.Sample11Fragment" />
+
+    <fragment
+        android:id="@+id/sample12_dest"
+        android:name="com.test.rxjava.fragment.Sample12Fragment" />
 </navigation>

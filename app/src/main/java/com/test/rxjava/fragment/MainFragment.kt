@@ -73,6 +73,9 @@ class MainFragment : BaseFragment() {
         mBinding.sample11.setOnClickListener { v ->
             Navigation.findNavController(v).navigate(MainFragmentDirections.sample11Action())
         }
+        mBinding.sample12.setOnClickListener { v ->
+            Navigation.findNavController(v).navigate(MainFragmentDirections.sample12Action())
+        }
     }
 
 }
