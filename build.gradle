@@ -2,7 +2,7 @@
 
 buildscript {
     ext.kotlin_version = '1.8.0'
-    ext.camerax_version  = '1.2.0'
+    ext.camerax_version = '1.2.1'
     repositories {
         google()
         mavenCentral()
