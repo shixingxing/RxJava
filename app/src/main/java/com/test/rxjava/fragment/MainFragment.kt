@@ -31,7 +31,7 @@ class MainFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         mBinding = FragmentMainBinding.inflate(inflater)
         return mBinding.root
     }
@@ -45,9 +45,7 @@ class MainFragment : BaseFragment() {
             Navigation.findNavController(v).navigate(MainFragmentDirections.sample2Action())
         }
         mBinding.sample3.setOnClickListener { v ->
-            context?.let {
-                startActivity(Intent(it, CameraXActivity::class.java))
-            }
+            Navigation.findNavController(v).navigate(MainFragmentDirections.sample3Action())
         }
         mBinding.sample4.setOnClickListener { v ->
             Navigation.findNavController(v).navigate(MainFragmentDirections.sample4Action())
@@ -75,6 +73,11 @@ class MainFragment : BaseFragment() {
         }
         mBinding.sample12.setOnClickListener { v ->
             Navigation.findNavController(v).navigate(MainFragmentDirections.sample12Action())
+        }
+        mBinding.sample13.setOnClickListener { v ->
+            context?.let {
+                startActivity(Intent(it, CameraXActivity::class.java))
+            }
         }
     }
 

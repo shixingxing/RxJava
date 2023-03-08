@@ -37,7 +37,7 @@
             android:layout_margin="15dp"
             android:background="@drawable/white_button"
             android:gravity="center"
-            android:text="CameraX"
+            android:text="RxJava"
             android:textColor="#000000"
             android:textSize="16sp" />
 
@@ -137,6 +137,17 @@
             android:background="@drawable/white_button"
             android:gravity="center"
             android:text="sample12 read msg"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/sample13"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="15dp"
+            android:background="@drawable/white_button"
+            android:gravity="center"
+            android:text="CameraX"
             android:textColor="#000000"
             android:textSize="16sp" />
     </LinearLayout>
