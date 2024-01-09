@@ -2,6 +2,7 @@ package com.test.rxjava.fragment
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.database.Cursor
 import android.os.Bundle
 import android.provider.Telephony.Sms
@@ -11,8 +12,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.chad.library.adapter4.BaseQuickAdapter
+import com.chad.library.adapter4.viewholder.QuickViewHolder
 import com.test.rxjava.BaseFragment
 import com.test.rxjava.R
 import com.test.rxjava.databinding.FragmentSample12Binding
@@ -27,18 +28,20 @@ class Sample12Fragment : BaseFragment() {
         Manifest.permission.RECEIVE_SMS,
     )
 
-    private val launch = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+    private val launch =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
 
-        val iterator = it.iterator()
-        iterator.forEach { item ->
-            if (!item.value) {
-                Toast.makeText(context, "permission error:" + item.key, Toast.LENGTH_LONG).show()
-                return@registerForActivityResult
+            val iterator = it.iterator()
+            iterator.forEach { item ->
+                if (!item.value) {
+                    Toast.makeText(context, "permission error:" + item.key, Toast.LENGTH_LONG)
+                        .show()
+                    return@registerForActivityResult
+                }
             }
-        }
 
-        startQuery()
-    }
+            startQuery()
+        }
 
     private val adapter = Adapter()
 
@@ -66,7 +69,8 @@ class Sample12Fragment : BaseFragment() {
     private fun startQuery() {
         val cr = context?.contentResolver
         val projection = arrayOf(Sms._ID, Sms.ADDRESS, Sms.PERSON, Sms.BODY, Sms.DATE)
-        val cursor: Cursor? = cr?.query(Sms.CONTENT_URI, projection, null, null, Sms.DEFAULT_SORT_ORDER)
+        val cursor: Cursor? =
+            cr?.query(Sms.CONTENT_URI, projection, null, null, Sms.DEFAULT_SORT_ORDER)
 
         val list = mutableListOf<SmsDto>()
         while (cursor?.moveToNext() == true) {
@@ -79,21 +83,29 @@ class Sample12Fragment : BaseFragment() {
         }
 
         cursor?.close()
-        adapter.setNewInstance(list)
+        adapter.submitList(list)
 
     }
 
-    private fun startEdit(item: SmsDto) {
+    private fun startEdit(item: SmsDto?) {
 
 
     }
 }
 
-class Adapter : BaseQuickAdapter<SmsDto, BaseViewHolder> {
-    constructor() : super(R.layout.layout_sms_item)
+class Adapter : BaseQuickAdapter<SmsDto, QuickViewHolder>() {
 
-    override fun convert(holder: BaseViewHolder, item: SmsDto) {
-        val showStr = item.address + ":" + item.body
+    override fun onBindViewHolder(holder: QuickViewHolder, position: Int, item: SmsDto?) {
+        val showStr = item?.address + ":" + item?.body
         holder.setText(R.id.sms_body, showStr)
     }
+
+    override fun onCreateViewHolder(
+        context: Context,
+        parent: ViewGroup,
+        viewType: Int
+    ): QuickViewHolder {
+        return QuickViewHolder(R.layout.layout_sms_item, parent)
+    }
+
 }
